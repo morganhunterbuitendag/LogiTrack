@@ -12,6 +12,10 @@ const nameInput = document.getElementById('producer-name');
 const locInput = document.getElementById('producer-location');
 const saveBtn = form.querySelector('.primary');
 const cancelBtn = form.querySelector('.cancel');
+const deleteDialog = document.getElementById('delete-dialog');
+const confirmDeleteBtn = deleteDialog.querySelector('.confirm');
+const cancelDeleteBtn = deleteDialog.querySelector('.cancel');
+let deleteIndex = null;
 let producers = [];
 
 async function loadProducers(){
@@ -52,15 +56,21 @@ function renderList(){
     row.className='producer-row';
     row.innerHTML=`<div class="name">${p.name}</div>
       <div class="location">${p.lat.toFixed(5)}, ${p.lon.toFixed(5)}</div>
-      <div class="actions"><button class="edit" data-index="${i}">✎</button></div>`;
+      <div class="actions"><button class="edit" data-index="${i}">✎</button><button class="delete" data-index="${i}">🗑</button></div>`;
     listEl.appendChild(row);
   });
 }
 
 listEl.addEventListener('click',e=>{
-  const btn=e.target.closest('.edit');
-  if(!btn) return;
-  openModal(Number(btn.dataset.index));
+  const editBtn=e.target.closest('.edit');
+  if(editBtn){
+    openModal(Number(editBtn.dataset.index));
+    return;
+  }
+  const delBtn=e.target.closest('.delete');
+  if(delBtn){
+    openDeleteModal(Number(delBtn.dataset.index));
+  }
 });
 
 addBtn.addEventListener('click',()=>openModal());
@@ -81,7 +91,27 @@ function openModal(index){
   modal.showModal();
 }
 
+function openDeleteModal(index){
+  deleteIndex = index;
+  deleteDialog.showModal();
+}
+
 cancelBtn.addEventListener('click',()=>modal.close());
+
+cancelDeleteBtn.addEventListener('click',()=>{
+  deleteDialog.close();
+  deleteIndex = null;
+});
+
+confirmDeleteBtn.addEventListener('click',()=>{
+  if(deleteIndex !== null){
+    producers.splice(deleteIndex,1);
+    persistProducers();
+    renderList();
+  }
+  deleteDialog.close();
+  deleteIndex = null;
+});
 
 form.addEventListener('submit',e=>{
   e.preventDefault();
