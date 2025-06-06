@@ -118,6 +118,14 @@ function renderGrid(){
   });
 }
 
+function renderProcessorList(){
+  gridBody.innerHTML="";
+  depots.forEach(d=>{
+    let tr=gridBody.insertRow();
+    tr.innerHTML=`<td>${d.name}</td>`;
+  });
+}
+
 function renderAllProducers(){
   producerLayer.clearLayers();
   farms.forEach(f=>{
@@ -152,7 +160,7 @@ async function init(){
   renderAllProducers();
   if(farms.length) farmSel.value=farms[0].name;
   commSel.value="Maize";
-  compute();
+  renderProcessorList();
 }
 
 init();
