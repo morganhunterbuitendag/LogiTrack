@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Producers</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* basic layout for producer management */
+    body{padding:20px;font-family:Arial,Helvetica,sans-serif;background:#f7f9fb}
+    h1{margin:0}
+    .header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}
+    .header button{background:#3182CE;color:#fff;border:none;border-radius:4px;cursor:pointer;font-size:24px;width:32px;height:32px;line-height:24px;padding:0}
+    table{width:100%;border-collapse:collapse;background:#fff}
+    th,td{border:1px solid #ccc;padding:8px;text-align:left}
+    .modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.4);display:flex;align-items:center;justify-content:center}
+    .modal{background:#fff;padding:20px;border-radius:6px;width:400px;max-width:95%}
+    .hidden{display:none}
+    .distance-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px}
+    .distance-grid label{display:flex;justify-content:space-between;align-items:center}
+    .distance-grid input{width:80px}
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Producers</h1>
+    <button id="new-btn">＋</button>
+  </div>
+  <table>
+    <thead>
+      <tr><th>ID</th><th>Name</th><th>Latitude</th><th>Longitude</th><th>Edit</th></tr>
+    </thead>
+    <tbody id="producer-body"></tbody>
+  </table>
+
+  <div id="modal" class="modal-overlay hidden">
+    <div class="modal">
+      <div id="modal-content"></div>
+    </div>
+  </div>
+
+<script src="producer.js"></script>
+</body>
+</html>
