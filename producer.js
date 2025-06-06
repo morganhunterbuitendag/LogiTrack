@@ -8,6 +8,7 @@ wrapper.insertBefore(listEl, headerRow.nextSibling);
 const addBtn = document.getElementById('new-btn');
 const modal = document.getElementById('producer-modal');
 const form = document.getElementById('producer-form');
+const modalTitle = document.getElementById('producer-modal-title');
 const nameInput = document.getElementById('producer-name');
 const locInput = document.getElementById('producer-location');
 const saveBtn = form.querySelector('.primary');
@@ -81,11 +82,13 @@ function openModal(index){
     nameInput.value=p.name;
     locInput.value=`${p.lat}, ${p.lon}`;
     form.dataset.index=index;
+    modalTitle.textContent='Edit Producer';
     saveBtn.textContent='Save';
   }else{
     nameInput.value='';
     locInput.value='';
     delete form.dataset.index;
+    modalTitle.textContent='Add Producer';
     saveBtn.textContent='Add';
   }
   modal.showModal();
