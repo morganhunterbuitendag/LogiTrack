@@ -100,16 +100,12 @@ function openModal(editObj){
   const nameInput = document.createElement('input');
   nameInput.type = 'text';
   nameInput.placeholder = 'Name';
-  const latInput = document.createElement('input');
-  latInput.type = 'text';
-  latInput.placeholder = 'Latitude';
-  const lonInput = document.createElement('input');
-  lonInput.type = 'text';
-  lonInput.placeholder = 'Longitude';
+  const locInput = document.createElement('input');
+  locInput.type = 'text';
+  locInput.placeholder = 'Latitude, Longitude';
   if(editObj){
     nameInput.value = editObj.name;
-    latInput.value = editObj.lat;
-    lonInput.value = editObj.lon;
+    locInput.value = `${editObj.lat}, ${editObj.lon}`;
   }
   const saveBtn = document.createElement('button');
   saveBtn.textContent = editObj ? 'Save' : 'Add';
@@ -120,8 +116,7 @@ function openModal(editObj){
   const form=document.createElement('div');
   form.className='modal-form';
   form.appendChild(labelWrap('Name', nameInput));
-  form.appendChild(labelWrap('Latitude', latInput));
-  form.appendChild(labelWrap('Longitude', lonInput));
+  form.appendChild(labelWrap('Location', locInput));
   const actions=document.createElement('div');
   actions.className='modal-actions';
   actions.appendChild(saveBtn);
@@ -132,8 +127,9 @@ function openModal(editObj){
   saveBtn.addEventListener('click', ()=>{
     const newObj = editObj || {id: nextId++};
     newObj.name = nameInput.value.trim();
-    newObj.lat = parseCoord(latInput.value);
-    newObj.lon = parseCoord(lonInput.value);
+    const loc = parseCoords(locInput.value);
+    newObj.lat = loc.lat;
+    newObj.lon = loc.lon;
     if(!editObj) producers.push(newObj);
     saveData();
     renderTable();
