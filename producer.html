@@ -6,13 +6,9 @@
   <title>Producers</title>
   <link rel="stylesheet" href="styles.css">
   <style>
-    /* basic layout for producer management */
-    body{padding:20px;font-family:Arial,Helvetica,sans-serif;background:#f7f9fb}
-    h1{margin:0}
-    .header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}
+    .header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;padding:0 25px}
+    .header h1{margin:0;font-size:1.4em}
     .header button{background:#3182CE;color:#fff;border:none;border-radius:4px;cursor:pointer;font-size:24px;width:32px;height:32px;line-height:24px;padding:0}
-    .home-link{margin-right:10px;font-size:14px;color:#fff;background:#3182CE;padding:6px 12px;border-radius:4px;text-decoration:none}
-    .home-link:hover{background:#2B6CB0}
     table{width:100%;border-collapse:collapse;background:#fff}
     th,td{border:1px solid #ccc;padding:8px;text-align:left}
     .modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.4);display:flex;align-items:center;justify-content:center}
@@ -24,26 +20,48 @@
   </style>
 </head>
 <body>
-  <div class="header">
-    <h1>Producers</h1>
-    <div>
-      <a href="Index.html" class="home-link">Home</a>
-      <button id="new-btn">＋</button>
-    </div>
-  </div>
-  <table>
-    <thead>
-      <tr><th>ID</th><th>Name</th><th>Latitude</th><th>Longitude</th><th>Edit</th></tr>
-    </thead>
-    <tbody id="producer-body"></tbody>
-  </table>
+<div class="workspace">
+  <header class="header-banner">
+    <div class="title">LogiTrack</div>
+  </header>
 
-  <div id="modal" class="modal-overlay hidden">
-    <div class="modal">
-      <div id="modal-content"></div>
+  <div class="dashboard">
+    <nav class="sidebar">
+        <ul>
+          <li class="tab" onclick="location.href='Index.html'">Home</li>
+          <li class="tab active" onclick="location.href='producer.html'">Producer</li>
+          <li class="tab">Processor</li>
+          <li class="tab">Settings</li>
+          <li class="tab">Admin</li>
+        </ul>
+      </nav>
+
+    <div class="content-area">
+      <div class="main-content-wrapper">
+        <div class="header">
+          <h1>Producers</h1>
+          <button id="new-btn">＋</button>
+        </div>
+        <table>
+          <thead>
+            <tr><th>ID</th><th>Name</th><th>Latitude</th><th>Longitude</th><th>Edit</th></tr>
+          </thead>
+          <tbody id="producer-body"></tbody>
+        </table>
+      </div>
     </div>
   </div>
+
+  <footer class="footer-note">&nbsp;</footer>
+</div>
+
+<div id="modal" class="modal-overlay hidden">
+  <div class="modal">
+    <div id="modal-content"></div>
+  </div>
+</div>
 
 <script src="producer.js"></script>
 </body>
 </html>
+

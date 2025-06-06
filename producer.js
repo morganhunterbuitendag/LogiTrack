@@ -72,12 +72,9 @@ function openModal(editObj){
   const nameInput = document.createElement('input');
   nameInput.type = 'text';
   nameInput.placeholder = 'Name';
-  const latInput = document.createElement('input');
-  latInput.type = 'text';
-  latInput.placeholder = 'Latitude';
-  const lonInput = document.createElement('input');
-  lonInput.type = 'text';
-  lonInput.placeholder = 'Longitude';
+  const coordInput = document.createElement('input');
+  coordInput.type = 'text';
+  coordInput.placeholder = 'Lat, Lon';
   const fetchBtn = document.createElement('button');
   fetchBtn.textContent = 'Fetch distances';
   fetchBtn.disabled = true;
@@ -92,8 +89,7 @@ function openModal(editObj){
 
   const formFrag = document.createDocumentFragment();
   formFrag.appendChild(labelWrap('Name', nameInput));
-  formFrag.appendChild(labelWrap('Lat', latInput));
-  formFrag.appendChild(labelWrap('Lon', lonInput));
+  formFrag.appendChild(labelWrap('Coords', coordInput));
   formFrag.appendChild(fetchBtn);
   formFrag.appendChild(grid);
   formFrag.appendChild(addBtn);
@@ -104,8 +100,7 @@ function openModal(editObj){
 
   // when coordinates are valid enable fetch
   function coordHandler(){
-    const lat = parseCoord(latInput.value);
-    const lon = parseCoord(lonInput.value);
+    const {lat,lon}=parseCoords(coordInput.value);
     if(editObj){
       const changed = lat !== editObj.lat || lon !== editObj.lon;
       fetchBtn.disabled = !changed || isNaN(lat) || isNaN(lon);
@@ -114,7 +109,7 @@ function openModal(editObj){
       fetchBtn.disabled = isNaN(lat) || isNaN(lon);
     }
   }
-  [latInput,lonInput].forEach(el=>el.addEventListener('input', coordHandler));
+  coordInput.addEventListener('input', coordHandler);
   coordHandler();
 
   function fillGrid(values){
@@ -136,8 +131,7 @@ function openModal(editObj){
 
   if(editObj){
     nameInput.value = editObj.name;
-    latInput.value = editObj.lat;
-    lonInput.value = editObj.lon;
+    coordInput.value = `${editObj.lat}, ${editObj.lon}`;
     fillGrid(editObj.distances);
     addBtn.textContent='Save';
     fetchBtn.disabled=true;
@@ -145,7 +139,7 @@ function openModal(editObj){
 
   fetchBtn.addEventListener('click', async ()=>{
     fetchBtn.disabled=true;
-    const lat=parseCoord(latInput.value), lon=parseCoord(lonInput.value);
+    const {lat,lon}=parseCoords(coordInput.value);
     const dists = await requestDistances(lat,lon);
     fillGrid(dists);
   });
@@ -153,8 +147,9 @@ function openModal(editObj){
   addBtn.addEventListener('click', ()=>{
     const newObj = editObj || {id: nextId++};
     newObj.name = nameInput.value.trim();
-    newObj.lat = parseCoord(latInput.value);
-    newObj.lon = parseCoord(lonInput.value);
+    const {lat,lon}=parseCoords(coordInput.value);
+    newObj.lat = lat;
+    newObj.lon = lon;
     newObj.distances = distInputs.map(inp=>parseFloat(inp.value));
     if(!editObj) producers.push(newObj);
     saveData();
@@ -196,6 +191,11 @@ function parseCoord(str){
     return val;
   }
   return NaN;
+}
+
+function parseCoords(str){
+  const parts=String(str).trim().split(/[ ,]+/);
+  return {lat:parseCoord(parts[0]), lon:parseCoord(parts[1])};
 }
 
 // POST to the ORS matrix API for distances from one producer to all depots

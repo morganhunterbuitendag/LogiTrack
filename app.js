@@ -8,6 +8,40 @@ function fmtTime(km,speed){if(!km)return"0 min";const m=Math.round(km/speed*60);
 /* ---------- data ---------- */
 let depots=[];
 
+const DEFAULT_FARMS=[
+  {lat:-27.413064112082218,lon:26.39355653815821,name:"Sf Haasbroek"},
+  {lat:-27.69152172672409,lon:26.44368253816803,name:"Cornelia"},
+  {lat:-27.651250282596436,lon:26.43624093558256,name:"JN Jacobsz"},
+  {lat:-28.071317908331952,lon:26.25064526701652,name:"HP Ferreira"},
+  {lat:-28.225539375209316,lon:26.124705380517383,name:"Teo Ferreira"},
+  {lat:-28.20738224520913,lon:26.38936080935168,name:"Izak Cronje"},
+  {lat:-28.240370859154467,lon:26.42322172469238,name:"Gerhard Cronje"},
+  {lat:-28.06731496698842,lon:26.574214267016327,name:"Matomundi"},
+  {lat:-27.94686542875395,lon:26.329509695847,name:"Maas Bdry"},
+  {lat:-28.091158479215565,lon:25.831808767017293,name:"Betmar"},
+  {lat:-27.716815778604488,lon:26.386336167003904,name:"Borlinghaus"},
+  {lat:-28.184118742166113,lon:26.989235695855452,name:"WD Botha"},
+  {lat:-28.12538113906193,lon:26.14054977848897,name:"Mons Bdy"}
+];
+
+const DEFAULT_DEPOTS=[
+  {lat:-28.581154919405076,lon:27.486046667781952,name:"SPAR"},
+  {lat:-28.46120571688839,lon:27.226272595865517,name:"SAX"},
+  {lat:-28.31817552131897,lon:26.405485195860393,name:"SCH"},
+  {lat:-28.010530642785685,lon:26.523585311188683,name:"THR"},
+  {lat:-28.188702177056772,lon:26.102694724690426,name:"KLE"},
+  {lat:-27.919950635668116,lon:25.772347724680895,name:"SAR"},
+  {lat:-27.845958675859443,lon:26.203191795843374,name:"MIS"},
+  {lat:-27.750205831514368,lon:26.11489109583991,name:"HLP"},
+  {lat:-27.505792080494125,lon:26.410354138161406,name:"VYF"},
+  {lat:-29.084108130608936,lon:26.139810024521754,name:"Itau"},
+  {lat:-27.972661330182213,lon:26.76107189731688,name:"Gritsly"},
+  {lat:-27.6686773822071,lon:27.21290848824452,name:"Premier"},
+  {lat:-30.695233329631165,lon:26.702676512363553,name:"Aliwal"},
+  {lat:-28.865702375034086,lon:27.87487832537334,name:"Ficksburg"},
+  {lat:-26.891791143416583,lon:26.66169294714649,name:"Klerksdorp"}
+];
+
 const commodityPrices={
   Maize:{base:3200,diff:{Delpa:0,"De Vale":-20,"Groot Saxony":50,"Help Mekaar":10,Kleinhoek:0,Mispah:-10,Sarbyn:30,Schoongesight:0,Sparta:40,Theronia:-5,"Vyf Susters":-5}},
   Soybeans:{base:7500,diff:{Delpa:10,"De Vale":0,"Groot Saxony":-30,"Help Mekaar":20,Kleinhoek:0,Mispah:-20,Sarbyn:10,Schoongesight:0,Sparta:-15,Theronia:0,"Vyf Susters":0}},
@@ -16,14 +50,19 @@ const commodityPrices={
 
 let farms=[];
 
-async function loadPoints(url){
-  const res=await fetch(url);
-  const text=await res.text();
-  return text.trim().split(/\r?\n/).map(l=>{
-    const m=l.trim().match(/^(-?\d+(?:\.\d+)?),\s*(-?\d+(?:\.\d+)?)(?:\s+)(.+)$/);
-    if(!m) return null;
-    return{lat:+m[1],lon:+m[2],name:m[3].trim()};
-  }).filter(Boolean);
+async function loadPoints(url,fallback){
+  try{
+    const res=await fetch(url);
+    if(!res.ok) throw new Error('bad');
+    const text=await res.text();
+    return text.trim().split(/\r?\n/).map(l=>{
+      const m=l.trim().match(/^(-?\d+(?:\.\d+)?),\s*(-?\d+(?:\.\d+)?)(?:\s+)(.+)$/);
+      if(!m) return null;
+      return{lat:+m[1],lon:+m[2],name:m[3].trim()};
+    }).filter(Boolean);
+  }catch(e){
+    return fallback;
+  }
 }
 
 const cfg={haulRate:2.5,speed:70};
@@ -109,8 +148,8 @@ function renderMap(farm){
 
 async function init(){
   [farms,depots]=await Promise.all([
-    loadPoints('producers.txt'),
-    loadPoints('processors.txt')
+    loadPoints('producers.txt', DEFAULT_FARMS),
+    loadPoints('processors.txt', DEFAULT_DEPOTS)
   ]);
   populateSelectors();
   renderAllProducers();
