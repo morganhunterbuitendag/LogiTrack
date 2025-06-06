@@ -74,14 +74,14 @@ function renderTable(){
   bodyEl.innerHTML = '';
   producers.forEach(p => {
     const tr = document.createElement('tr');
-    tr.innerHTML = `<td>${p.id}</td><td>${p.name||'name required still:'}</td>`+
-      `<td>${p.lat.toFixed(3)}</td><td>${p.lon.toFixed(3)}</td>`+
-      `<td><button data-id="${p.id}" class="edit">Edit</button></td>`;
+    const loc = `${p.lat.toFixed(3)}, ${p.lon.toFixed(3)}`;
+    tr.innerHTML = `<td>${p.name}</td><td>${loc}</td>`+
+      `<td><span data-id="${p.id}" class="edit" role="button">\u270E</span></td>`;
     bodyEl.appendChild(tr);
   });
-  bodyEl.querySelectorAll('button.edit').forEach(btn=>{
+  bodyEl.querySelectorAll('.edit').forEach(btn=>{
     btn.addEventListener('click', ()=>{
-      const id=parseInt(btn.getAttribute('data-id')); 
+      const id=parseInt(btn.getAttribute('data-id'));
       const obj=producers.find(p=>p.id===id);
       if(obj) openModal(obj);
     });
@@ -95,85 +95,32 @@ function openModal(editObj){
   const nameInput = document.createElement('input');
   nameInput.type = 'text';
   nameInput.placeholder = 'Name';
-  const coordInput = document.createElement('input');
-  coordInput.type = 'text';
-  coordInput.placeholder = 'Lat, Lon';
-  const fetchBtn = document.createElement('button');
-  fetchBtn.textContent = 'Fetch distances';
-  fetchBtn.disabled = true;
-  const grid = document.createElement('div');
-  grid.className = 'distance-grid';
-  const addBtn = document.createElement('button');
-  addBtn.textContent = 'Add producer';
-  addBtn.disabled = true;
-  const cancelBtn = document.createElement('button');
-  cancelBtn.textContent = 'Cancel';
-  cancelBtn.style.marginLeft = '10px';
-
-  const formFrag = document.createDocumentFragment();
-  formFrag.appendChild(labelWrap('Name', nameInput));
-  formFrag.appendChild(labelWrap('Coords', coordInput));
-  formFrag.appendChild(fetchBtn);
-  formFrag.appendChild(grid);
-  formFrag.appendChild(addBtn);
-  formFrag.appendChild(cancelBtn);
-  modalContent.appendChild(formFrag);
-
-  const distInputs = [];
-
-  // when coordinates are valid enable fetch
-  function coordHandler(){
-    const {lat,lon}=parseCoords(coordInput.value);
-    if(editObj){
-      const changed = lat !== editObj.lat || lon !== editObj.lon;
-      fetchBtn.disabled = !changed || isNaN(lat) || isNaN(lon);
-      if(changed) addBtn.disabled = true; else checkAll();
-    }else{
-      fetchBtn.disabled = isNaN(lat) || isNaN(lon);
-    }
-  }
-  coordInput.addEventListener('input', coordHandler);
-  coordHandler();
-
-  function fillGrid(values){
-    grid.innerHTML='';
-    for(let i=0;i<10;i++){
-      const lab=document.createElement('label');
-      lab.textContent = DEPOT_NAMES[i];
-      const inp=document.createElement('input');
-      inp.type='number';
-      inp.step='any';
-      if(values && values[i]!=null) inp.value=values[i];
-      lab.appendChild(inp);
-      grid.appendChild(lab);
-      distInputs.push(inp);
-      inp.addEventListener('input', checkAll);
-    }
-    checkAll();
-  }
-
+  const locInput = document.createElement('input');
+  locInput.type = 'text';
+  locInput.placeholder = 'Lat, Lon';
   if(editObj){
     nameInput.value = editObj.name;
-    coordInput.value = `${editObj.lat}, ${editObj.lon}`;
-    fillGrid(editObj.distances);
-    addBtn.textContent='Save';
-    fetchBtn.disabled=true;
+    locInput.value = `${editObj.lat}, ${editObj.lon}`;
   }
+  const saveBtn = document.createElement('button');
+  saveBtn.textContent = editObj ? 'Save' : 'Add';
+  const cancelBtn = document.createElement('button');
+  cancelBtn.textContent = 'Cancel';
+  cancelBtn.style.marginLeft='10px';
 
-  fetchBtn.addEventListener('click', async ()=>{
-    fetchBtn.disabled=true;
-    const {lat,lon}=parseCoords(coordInput.value);
-    const dists = await requestDistances(lat,lon);
-    fillGrid(dists);
-  });
+  const frag=document.createDocumentFragment();
+  frag.appendChild(labelWrap('Name', nameInput));
+  frag.appendChild(labelWrap('Location', locInput));
+  frag.appendChild(saveBtn);
+  frag.appendChild(cancelBtn);
+  modalContent.appendChild(frag);
 
-  addBtn.addEventListener('click', ()=>{
+  saveBtn.addEventListener('click', ()=>{
     const newObj = editObj || {id: nextId++};
     newObj.name = nameInput.value.trim();
-    const {lat,lon}=parseCoords(coordInput.value);
+    const {lat,lon} = parseCoords(locInput.value);
     newObj.lat = lat;
     newObj.lon = lon;
-    newObj.distances = distInputs.map(inp=>parseFloat(inp.value));
     if(!editObj) producers.push(newObj);
     saveData();
     renderTable();
@@ -181,10 +128,6 @@ function openModal(editObj){
   });
 
   cancelBtn.addEventListener('click', closeModal);
-
-  function checkAll(){
-    addBtn.disabled = distInputs.some(inp=>isNaN(parseFloat(inp.value)));
-  }
 }
 
 function closeModal(){
