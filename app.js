@@ -1,0 +1,102 @@
+/* ---------- helpers ---------- */
+function dms(d,m,s,dir){let v=+d+(+m)/60+(+s)/3600;return(dir==="S"||dir==="W")?-v:v}
+function hav(lat1,lon1,lat2,lon2){const R=6371,t=x=>x*Math.PI/180;const dLat=t(lat2-lat1),dLon=t(lon2-lon1);
+  const a=Math.sin(dLat/2)**2+Math.cos(t(lat1))*Math.cos(t(lat2))*Math.sin(dLon/2)**2;
+  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));}
+function fmtTime(km,speed){if(!km)return"0 min";const m=Math.round(km/speed*60);return`${Math.floor(m/60)}h ${m%60}m`.replace(/^0h /,"");}
+
+/* ---------- data ---------- */
+const depots=[
+  {name:"Delpa",lat:dms(29,6,22.9,"S"),lon:dms(23,45,14.5,"E"),fill:.72},
+  {name:"De Vale",lat:dms(29,0,55.39,"S"),lon:dms(23,55,16.63,"E"),fill:.45},
+  {name:"Groot Saxony",lat:dms(28,27,43,"S"),lon:dms(27,13,34.9,"E"),fill:.38},
+  {name:"Help Mekaar",lat:dms(27,45,3.5,"S"),lon:dms(26,6,56.9,"E"),fill:.66},
+  {name:"Kleinhoek",lat:dms(28,11,20.2,"S"),lon:dms(26,6,9.7,"E"),fill:.93},
+  {name:"Mispah",lat:dms(27,50,47.75,"S"),lon:dms(26,12,22.84,"E"),fill:.54},
+  {name:"Sarbyn",lat:dms(27,55,6.7,"S"),lon:dms(25,46,38,"E"),fill:.61},
+  {name:"Schoongesight",lat:dms(28,18,44.5,"S"),lon:dms(26,24,20.7,"E"),fill:.82},
+  {name:"Sparta",lat:dms(28,34,52.6,"S"),lon:dms(27,29,9.9,"E"),fill:.25},
+  {name:"Theronia",lat:dms(27,30,25.2,"S"),lon:dms(26,24,34.82,"E"),fill:.68},
+  {name:"Vyf Susters",lat:dms(27,30,25.2,"S"),lon:dms(26,24,34.82,"E"),fill:.57}
+];
+
+const commodityPrices={
+  Maize:{base:3200,diff:{Delpa:0,"De Vale":-20,"Groot Saxony":50,"Help Mekaar":10,Kleinhoek:0,Mispah:-10,Sarbyn:30,Schoongesight:0,Sparta:40,Theronia:-5,"Vyf Susters":-5}},
+  Soybeans:{base:7500,diff:{Delpa:10,"De Vale":0,"Groot Saxony":-30,"Help Mekaar":20,Kleinhoek:0,Mispah:-20,Sarbyn:10,Schoongesight:0,Sparta:-15,Theronia:0,"Vyf Susters":0}},
+  Wheat:{base:4800,diff:{}}
+};
+
+const farms=[
+  {name:"Farm Alpha (Welkom)",    lat:dms(27,58,30,"S"),lon:dms(26,43,30,"E")},
+  {name:"Farm Bravo (Bloem)",     lat:dms(29,6,0,"S"),  lon:dms(26,13,0,"E")},
+  {name:"Farm Charlie (Kimberley)",lat:dms(28,44,0,"S"),lon:dms(24,46,0,"E")},
+  {name:"Farm Delta (Bethlehem)", lat:dms(28,14,0,"S"),lon:dms(28,18,0,"E")}
+];
+
+const cfg={haulRate:2.5,speed:70};
+
+/* ---------- DOM ---------- */
+const farmSel=document.getElementById("client-farm");
+const commSel=document.getElementById("commodity");
+const tonInput=document.getElementById("tonnage");
+const gridBody=document.getElementById("depot-grid-body");
+const tariffDisp=document.getElementById("haulage-tariff-display");
+
+/* ---------- map ---------- */
+const saMap=L.map("sa-map",{zoomControl:false}).setView([-28,25],6);
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:18,attribution:"© OSM"}).addTo(saMap);
+const markerLayer=L.layerGroup().addTo(saMap);
+const routeLayer=L.layerGroup().addTo(saMap);
+
+/* ---------- populate selectors ---------- */
+farms.forEach(f=>{let o=document.createElement("option");o.value=o.textContent=f.name;farmSel.appendChild(o)});
+Object.keys(commodityPrices).forEach(c=>{let o=document.createElement("option");o.value=o.textContent=c;commSel.appendChild(o)});
+tariffDisp.textContent=cfg.haulRate.toFixed(2);
+
+/* ---------- core ---------- */
+let currentResults=[];
+function compute(){
+  const farm=farms.find(f=>f.name===farmSel.value);
+  const comm=commSel.value;
+  if(!farm||!comm){
+    gridBody.innerHTML="<tr><td colspan='1' style='text-align:center;padding:20px'>Select farm and commodity.</td></tr>";
+    markerLayer.clearLayers();routeLayer.clearLayers();currentResults=[];
+    return;
+  }
+  const info=commodityPrices[comm];
+  currentResults=depots.map(d=>{
+    const km=hav(farm.lat,farm.lon,d.lat,d.lon);
+    const haul=km*cfg.haulRate;
+    const price=info.base+(info.diff[d.name]||0);
+    return{...d,km,haul,landed:price+haul,price};
+  }).sort((a,b)=>a.landed-b.landed);
+
+  renderGrid();renderMap(farm);
+  const best=currentResults[0];
+}
+function renderGrid(){
+  gridBody.innerHTML="";
+  currentResults.forEach((r,i)=>{
+    let tr=gridBody.insertRow();
+    tr.innerHTML=`<td>${r.name}</td>`;
+    if(i===0) tr.classList.add("best-price");
+    else if(i===1) tr.classList.add("runner-up-price");
+  });
+}
+function renderMap(farm){
+  markerLayer.clearLayers();routeLayer.clearLayers();
+  L.circleMarker([farm.lat,farm.lon],{radius:8,weight:1,color:"#fff",fillColor:"#DD6B20",fillOpacity:1}).addTo(markerLayer).bindTooltip(farm.name);
+  currentResults.forEach((d,i)=>{
+    const clr=i===0?"#2F855A":i===1?"#D69E2E":"#3182CE";
+    L.circleMarker([d.lat,d.lon],{radius:7,weight:1,color:"#fff",fillColor:clr,fillOpacity:1})
+      .addTo(markerLayer).bindTooltip(`${d.name}\nR${d.landed.toFixed(2)} / ${d.km.toFixed(0)} km`);
+  });
+  let best=currentResults[0];L.polyline([[farm.lat,farm.lon],[best.lat,best.lon]],{color:"#2F855A",weight:3,dashArray:"6 3"}).addTo(routeLayer);
+  if(currentResults.length>1){let run=currentResults[1];L.polyline([[farm.lat,farm.lon],[run.lat,run.lon]],{color:"#D69E2E",weight:2,dashArray:"4 2",opacity:.8}).addTo(routeLayer);}
+  saMap.fitBounds(routeLayer.getBounds(),{padding:[30,30]});
+}
+/* ---------- events ---------- */
+[farmSel,commSel,tonInput].forEach(el=>el.addEventListener("input",compute));
+
+/* ---------- init ---------- */
+farmSel.value=farms[0].name;commSel.value="Maize";compute();
