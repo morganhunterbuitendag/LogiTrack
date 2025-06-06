@@ -66,8 +66,13 @@ const bodyEl = document.getElementById('producer-body');
 const modal = document.getElementById('modal');
 const modalContent = document.getElementById('modal-content');
 const newBtn = document.getElementById('new-btn');
+const importBtn = document.getElementById('import-btn');
 
 newBtn.addEventListener('click', () => openModal());
+if(importBtn) importBtn.addEventListener('click', async () => {
+  await importFromFile();
+  renderTable();
+});
 
 // Render the producers table from the array
 function renderTable(){
