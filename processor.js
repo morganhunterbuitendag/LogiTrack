@@ -8,6 +8,7 @@ wrapper.insertBefore(listEl, headerRow.nextSibling);
 const addBtn = document.getElementById('new-btn');
 const modal = document.getElementById('processor-modal');
 const form = document.getElementById('processor-form');
+const modalTitle = document.getElementById('processor-modal-title');
 const nameInput = document.getElementById('processor-name');
 const locInput = document.getElementById('processor-location');
 const saveBtn = form.querySelector('.primary');
@@ -82,11 +83,13 @@ function openModal(index){
     nameInput.value=p.name;
     locInput.value=`${p.lat}, ${p.lon}`;
     form.dataset.index=index;
+    modalTitle.textContent='Edit Processor';
     saveBtn.textContent='Save';
   }else{
     nameInput.value='';
     locInput.value='';
     delete form.dataset.index;
+    modalTitle.textContent='Add Processor';
     saveBtn.textContent='Add';
   }
   modal.showModal();
