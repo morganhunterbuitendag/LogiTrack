@@ -10,21 +10,48 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
 <div class="workspace">
-  <header class="header-banner">
-    <div class="title">LogiTrack</div>
+  <header class="bg-white shadow-sm border-b border-slate-200 px-8 py-4">
+    <h2 class="text-2xl font-bold text-slate-800">LogiTrack</h2>
   </header>
 
   <div class="dashboard">
-    <nav class="sidebar">
-        <ul>
-          <li class="tab active" onclick="location.href='Index.html'">Home</li>
-          <li class="tab" onclick="location.href='producer.html'">Producer</li>
-          <li class="tab" onclick="location.href='processor.html'">Processor</li>
-          <li class="tab">Settings</li>
-          <li class="tab">Admin</li>
+    <nav class="sidebar bg-white shadow-xl border-r border-slate-200">
+        <ul class="space-y-1 px-2 py-4">
+          <li>
+            <a href="Index.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-100 transition-all duration-200 hover:text-slate-800 bg-blue-50 text-blue-700 border border-blue-200">
+              <span class="material-symbols-outlined text-lg">home</span>
+              <span class="font-medium">Home</span>
+            </a>
+          </li>
+          <li>
+            <a href="producer.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-100 transition-all duration-200 hover:text-slate-800">
+              <span class="material-symbols-outlined text-lg">agriculture</span>
+              <span class="font-medium">Producer</span>
+            </a>
+          </li>
+          <li>
+            <a href="processor.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-100 transition-all duration-200 hover:text-slate-800">
+              <span class="material-symbols-outlined text-lg">factory</span>
+              <span class="font-medium">Processor</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-100 transition-all duration-200 hover:text-slate-800">
+              <span class="material-symbols-outlined text-lg">settings</span>
+              <span class="font-medium">Settings</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-100 transition-all duration-200 hover:text-slate-800">
+              <span class="material-symbols-outlined text-lg">admin_panel_settings</span>
+              <span class="font-medium">Admin</span>
+            </a>
+          </li>
         </ul>
       </nav>
 
@@ -48,7 +75,7 @@
         <div class="top-content-row">
 
       <!-- depot grid -->
-      <div class="grid-container">
+      <div class="grid-container rounded-xl border border-slate-200 shadow-sm">
         <table class="depot-table">
           <thead>
             <tr>
@@ -61,7 +88,7 @@
 
       <!-- map + info -->
       <div class="map-and-info-container">
-        <div class="map-container"><div id="sa-map"></div></div>
+        <div class="map-container rounded-xl border border-slate-200 shadow-sm"><div id="sa-map"></div></div>
       </div>
     </div>
     </div>
