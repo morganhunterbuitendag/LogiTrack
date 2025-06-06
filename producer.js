@@ -26,6 +26,11 @@ const DEPOTS = [
 let producers = [];
 let nextId = 1;
 loadData();
+if(producers.length===0){
+  importFromFile().then(renderTable);
+}else{
+  renderTable();
+}
 
 function loadData(){
   try{ producers = JSON.parse(localStorage.getItem('producers')) || []; }catch(e){ producers=[]; }
@@ -34,6 +39,24 @@ function loadData(){
 function saveData(){
   localStorage.setItem('producers', JSON.stringify(producers));
   localStorage.setItem('nextId', String(nextId));
+}
+
+async function importFromFile(){
+  try{
+    const res = await fetch('producers.txt');
+    if(!res.ok) return;
+    const text = await res.text();
+    const lines = text.trim().split(/\r?\n/);
+    producers = lines.map((l,i)=>{
+      const m=l.match(/^(-?\d+(?:\.\d+)?),\s*(-?\d+(?:\.\d+)?)(?:\s+)(.+)$/);
+      if(!m) return null;
+      return {id: nextId + i, lat:parseFloat(m[1]), lon:parseFloat(m[2]), name:m[3].trim(), distances:Array(10).fill(null)};
+    }).filter(Boolean);
+    nextId += producers.length;
+    saveData();
+  }catch(e){
+    // ignore
+  }
 }
 
 // -------- DOM elements ---------------------------------------
@@ -62,8 +85,6 @@ function renderTable(){
     });
   });
 }
-
-renderTable();
 
 // Create and display the modal dialog for adding/editing producers
 function openModal(editObj){
