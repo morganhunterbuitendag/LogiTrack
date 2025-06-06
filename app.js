@@ -38,7 +38,8 @@ const tariffDisp=document.getElementById("haulage-tariff-display");
 /* ---------- map ---------- */
 const saMap=L.map("sa-map",{zoomControl:false}).setView([-28,25],6);
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:18,attribution:"© OSM"}).addTo(saMap);
-const markerLayer=L.layerGroup().addTo(saMap);
+const producerLayer=L.layerGroup().addTo(saMap); // all producers
+const markerLayer=L.layerGroup().addTo(saMap);   // selected farm + depots
 const routeLayer=L.layerGroup().addTo(saMap);
 
 /* ---------- populate selectors ---------- */
@@ -80,6 +81,17 @@ function renderGrid(){
     else if(i===1) tr.classList.add("runner-up-price");
   });
 }
+
+function renderAllProducers(){
+  producerLayer.clearLayers();
+  farms.forEach(f=>{
+    L.circleMarker([f.lat,f.lon],{radius:4,weight:1,color:"#fff",fillColor:"#666",fillOpacity:.8})
+      .addTo(producerLayer).bindTooltip(f.name);
+  });
+  if(farms.length){
+    saMap.fitBounds(producerLayer.getBounds(),{padding:[30,30]});
+  }
+}
 function renderMap(farm){
   markerLayer.clearLayers();routeLayer.clearLayers();
   L.circleMarker([farm.lat,farm.lon],{radius:8,weight:1,color:"#fff",fillColor:"#DD6B20",fillOpacity:1}).addTo(markerLayer).bindTooltip(farm.name);
@@ -101,6 +113,7 @@ async function init(){
     loadPoints('processors.txt')
   ]);
   populateSelectors();
+  renderAllProducers();
   if(farms.length) farmSel.value=farms[0].name;
   commSel.value="Maize";
   compute();
