@@ -48,7 +48,7 @@ async function loadProcessors(){
       ];
   }
   localStorage.setItem('processors', JSON.stringify(processors));
-}
+}}
 
 function renderList(){
   listEl.innerHTML='';
