@@ -95,32 +95,40 @@ function openModal(editObj){
   const nameInput = document.createElement('input');
   nameInput.type = 'text';
   nameInput.placeholder = 'Name';
-  const locInput = document.createElement('input');
-  locInput.type = 'text';
-  locInput.placeholder = 'Lat, Lon';
+  const latInput = document.createElement('input');
+  latInput.type = 'text';
+  latInput.placeholder = 'Latitude';
+  const lonInput = document.createElement('input');
+  lonInput.type = 'text';
+  lonInput.placeholder = 'Longitude';
   if(editObj){
     nameInput.value = editObj.name;
-    locInput.value = `${editObj.lat}, ${editObj.lon}`;
+    latInput.value = editObj.lat;
+    lonInput.value = editObj.lon;
   }
   const saveBtn = document.createElement('button');
   saveBtn.textContent = editObj ? 'Save' : 'Add';
   const cancelBtn = document.createElement('button');
   cancelBtn.textContent = 'Cancel';
-  cancelBtn.style.marginLeft='10px';
+  cancelBtn.className = 'cancel';
 
-  const frag=document.createDocumentFragment();
-  frag.appendChild(labelWrap('Name', nameInput));
-  frag.appendChild(labelWrap('Location', locInput));
-  frag.appendChild(saveBtn);
-  frag.appendChild(cancelBtn);
-  modalContent.appendChild(frag);
+  const form=document.createElement('div');
+  form.className='modal-form';
+  form.appendChild(labelWrap('Name', nameInput));
+  form.appendChild(labelWrap('Latitude', latInput));
+  form.appendChild(labelWrap('Longitude', lonInput));
+  const actions=document.createElement('div');
+  actions.className='modal-actions';
+  actions.appendChild(saveBtn);
+  actions.appendChild(cancelBtn);
+  form.appendChild(actions);
+  modalContent.appendChild(form);
 
   saveBtn.addEventListener('click', ()=>{
     const newObj = editObj || {id: nextId++};
     newObj.name = nameInput.value.trim();
-    const {lat,lon} = parseCoords(locInput.value);
-    newObj.lat = lat;
-    newObj.lon = lon;
+    newObj.lat = parseCoord(latInput.value);
+    newObj.lon = parseCoord(lonInput.value);
     if(!editObj) producers.push(newObj);
     saveData();
     renderTable();
@@ -137,7 +145,7 @@ function closeModal(){
 // util to wrap label and input
 function labelWrap(text, input){
   const lbl=document.createElement('label');
-  lbl.textContent=text+' ';
+  lbl.textContent=text;
   lbl.appendChild(input);
   return lbl;
 }
