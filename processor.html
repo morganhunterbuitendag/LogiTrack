@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Processors</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;padding:0 25px}
+    .header h1{margin:0;font-size:1.4em}
+    .header button{background:#3182CE;color:#fff;border:none;border-radius:4px;cursor:pointer;font-size:24px;width:32px;height:32px;line-height:24px;padding:0}
+    #processor-list{display:flex;flex-direction:column;gap:10px;padding:0 25px}
+    .processor-row{display:flex;align-items:center;width:100%;padding:16px;border-radius:8px;gap:15px}
+    .processor-row:nth-child(odd){background:rgba(0,0,0,.03)}
+    .processor-row:hover{box-shadow:0 2px 4px rgba(0,0,0,.1)}
+    .processor-row .name{flex:1;font-weight:500}
+    .processor-row .location{flex:1;color:#555}
+    .processor-row button.edit{background:#3182CE;color:#fff;border:none;border-radius:4px;padding:4px 8px;cursor:pointer}
+    dialog::backdrop{background:rgba(0,0,0,.4)}
+    dialog{border:none;border-radius:8px;padding:20px;max-width:400px}
+    dialog label{display:block;font-weight:600;color:#2C7A7B;margin-top:12px}
+    dialog label:first-child{margin-top:0}
+    dialog input{display:block;width:100%;margin-top:6px;padding:8px 10px;border:1px solid #cbd5e0;border-radius:4px;font-size:.95em}
+    dialog .actions{text-align:right;margin-top:15px}
+    dialog .actions button{background:#3182CE;color:#fff;border:none;border-radius:4px;padding:8px 16px;cursor:pointer;font-size:.9em}
+    dialog .actions .cancel{background:#e2e8f0;color:#2D3748;margin-left:8px}
+  </style>
+</head>
+<body>
+<div class="workspace">
+  <header class="header-banner">
+    <div class="title">LogiTrack</div>
+  </header>
+
+  <div class="dashboard">
+    <nav class="sidebar">
+        <ul>
+          <li class="tab" onclick="location.href='Index.html'">Home</li>
+          <li class='tab' onclick="location.href='producer.html'">Producer</li>
+          <li class='tab active' onclick="location.href='processor.html'">Processor</li>
+          <li class="tab">Settings</li>
+          <li class="tab">Admin</li>
+        </ul>
+      </nav>
+
+    <div class="content-area">
+      <div class="main-content-wrapper">
+        <div class="header">
+          <h1>Processors</h1>
+          <div class="header-actions">
+            <button id="new-btn">＋</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer-note">&nbsp;</footer>
+</div>
+
+<dialog id="processor-modal">
+  <form id="processor-form">
+    <label>Name
+      <input id="processor-name" type="text">
+    </label>
+    <label>Location
+      <input id="processor-location" type="text">
+    </label>
+    <div class="actions">
+      <button type="submit" class="primary">Save</button>
+      <button type="button" class="cancel">Cancel</button>
+    </div>
+  </form>
+</dialog>
+
+<script src="processor.js"></script>
+</body>
+</html>
+
