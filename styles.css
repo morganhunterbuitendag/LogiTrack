@@ -4,9 +4,8 @@ html,body{margin:0;height:100%;font-family:-apple-system,BlinkMacSystemFont,"Seg
 .workspace{display:flex;flex-direction:column;height:100vh}
 
 /* ---------- banner ---------- */
-.header-banner{background:#2C7A7B;color:#fff;padding:12px 25px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 4px rgba(0,0,0,.1)}
-.logo{font-size:1.6em;font-weight:600}
-.title{font-size:1.6em;font-weight:300}
+.header-banner{background:#2C7A7B;color:#fff;padding:12px 25px;display:flex;justify-content:center;align-items:center;box-shadow:0 2px 4px rgba(0,0,0,.1)}
+.title{font-size:1.8em;font-weight:500}
 
 /* ---------- control bar ---------- */
 .control-strip{background:#fff;padding:15px 25px;border-bottom:1px solid #e2e8f0;display:flex;flex-wrap:wrap;gap:20px}
@@ -20,6 +19,15 @@ html,body{margin:0;height:100%;font-family:-apple-system,BlinkMacSystemFont,"Seg
 .top-content-row{display:flex;gap:25px}
 .grid-container{flex:0 0 60%;background:#fff;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.08);max-height:500px;overflow-y:auto}
 .map-and-info-container{flex:0 0 40%;display:flex;flex-direction:column;gap:15px}
+
+/* dashboard layout */
+.dashboard{display:flex;flex:1;overflow:hidden}
+.sidebar{background:#2C7A7B;color:#fff;width:180px;padding:20px 0}
+.sidebar ul{list-style:none;margin:0;padding:0}
+.sidebar li{padding:12px 20px;cursor:pointer;font-weight:500}
+.sidebar li:hover{background:#319795}
+.sidebar li.active{background:#285E61}
+.content-area{flex:1;display:flex;flex-direction:column}
 
 /* ---------- table ---------- */
 table{width:100%;border-collapse:collapse}
