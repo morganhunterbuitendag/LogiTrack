@@ -54,3 +54,8 @@ tr:last-child td{border-bottom:none}
 
 /* ---------- footer ---------- */
 .footer-note{padding:10px 25px;background:#edf2f7;font-size:.85em;text-align:center;border-top:1px solid #e2e8f0;color:#718096}
+
+/* ---------- dialogs ---------- */
+dialog{border:none;border-radius:8px;padding:0;}
+dialog form{display:flex;flex-direction:column;gap:1rem;padding:2rem;min-width:420px;}
+dialog .actions{display:flex;justify-content:flex-end;gap:.75rem;margin-top:1.5rem}
