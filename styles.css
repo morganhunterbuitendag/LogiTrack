@@ -1,0 +1,52 @@
+/* ---------- reset & base ---------- */
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:#f7f9fb;color:#333}
+.workspace{display:flex;flex-direction:column;height:100vh}
+
+/* ---------- banner ---------- */
+.header-banner{background:#2C7A7B;color:#fff;padding:12px 25px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 4px rgba(0,0,0,.1)}
+.logo{font-size:1.6em;font-weight:600}
+.title{font-size:1.6em;font-weight:300}
+
+/* ---------- control bar ---------- */
+.control-strip{background:#fff;padding:15px 25px;border-bottom:1px solid #e2e8f0;display:flex;flex-wrap:wrap;gap:20px}
+.control-strip label{font-weight:500;margin-right:8px;color:#4A5568}
+.control-strip select,.control-strip input{padding:10px 12px;border:1px solid #cbd5e0;border-radius:6px;font-size:.95em;background:#fdfdfd;transition:border-color .2s,box-shadow .2s}
+.control-strip select:focus,.control-strip input:focus{border-color:#2C7A7B;box-shadow:0 0 0 2px rgba(44,122,123,.2);outline:none}
+#tonnage{width:85px}
+
+/* ---------- layout ---------- */
+.main-content-wrapper{flex:1;display:flex;flex-direction:column;gap:25px;padding:25px;overflow:auto}
+.top-content-row{display:flex;gap:25px}
+.grid-container{flex:0 0 60%;background:#fff;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.08);max-height:500px;overflow-y:auto}
+.map-and-info-container{flex:0 0 40%;display:flex;flex-direction:column;gap:15px}
+
+/* ---------- table ---------- */
+table{width:100%;border-collapse:collapse}
+th,td{padding:12px 15px;text-align:left;border-bottom:1px solid #edf2f7}
+th{background:#f8fafc;font-weight:600;color:#4A5568;position:sticky;top:0;z-index:10}
+tr:last-child td{border-bottom:none}
+.best-price{background:#E6FFFA;font-weight:600}
+.best-price td{color:#285E61}
+.runner-up-price{background:#FFFBEB}
+.runner-up-price td{color:#744210}
+
+/* capacity bar */
+.fill-bar{background:#e9ecef;border-radius:4px;height:8px;width:100%}
+.fill-bar>span{display:block;height:100%;border-radius:4px}
+
+/* ---------- map ---------- */
+.map-container{height:300px;background:#E0E7EF;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.08);overflow:hidden}
+#sa-map{width:100%;height:100%}
+
+/* ---------- info boxes ---------- */
+.trip-info-container,.depot-comparison-container{background:#fff;padding:15px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.trip-info-container h3,.depot-comparison-container h3{margin:0 0 10px;font-size:1.1em;color:#2C7A7B}
+.trip-info-container p,.depot-comparison-container div,.depot-comparison-container p{margin:8px 0;font-size:.95em}
+.depot-comparison-container select{padding:8px 10px;border:1px solid #cbd5e0;border-radius:6px;font-size:.9em;background:#fdfdfd;margin:0 10px 10px 0}
+#depot-savings-display{font-weight:700;color:#2F855A}
+#depot-savings-display.negative,#depot-savings-per-load-display.negative{color:#C53030}
+#depot-savings-per-load-display{margin-top:5px;font-weight:700;color:#2C7A7B}
+
+/* ---------- footer ---------- */
+.footer-note{padding:10px 25px;background:#edf2f7;font-size:.85em;text-align:center;border-top:1px solid #e2e8f0;color:#718096}

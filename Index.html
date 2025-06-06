@@ -9,60 +9,7 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-  <style>
-  /* ---------- reset & base ---------- */
-  *{box-sizing:border-box}
-  html,body{margin:0;height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:#f7f9fb;color:#333}
-  .workspace{display:flex;flex-direction:column;height:100vh}
-
-  /* ---------- banner ---------- */
-  .header-banner{background:#2C7A7B;color:#fff;padding:12px 25px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 4px rgba(0,0,0,.1)}
-  .logo{font-size:1.6em;font-weight:600}
-  .title{font-size:1.6em;font-weight:300}
-
-  /* ---------- control bar ---------- */
-  .control-strip{background:#fff;padding:15px 25px;border-bottom:1px solid #e2e8f0;display:flex;flex-wrap:wrap;gap:20px}
-  .control-strip label{font-weight:500;margin-right:8px;color:#4A5568}
-  .control-strip select,.control-strip input{padding:10px 12px;border:1px solid #cbd5e0;border-radius:6px;font-size:.95em;background:#fdfdfd;transition:border-color .2s,box-shadow .2s}
-  .control-strip select:focus,.control-strip input:focus{border-color:#2C7A7B;box-shadow:0 0 0 2px rgba(44,122,123,.2);outline:none}
-  #tonnage{width:85px}
-
-  /* ---------- layout ---------- */
-  .main-content-wrapper{flex:1;display:flex;flex-direction:column;gap:25px;padding:25px;overflow:auto}
-  .top-content-row{display:flex;gap:25px}
-  .grid-container{flex:0 0 60%;background:#fff;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.08);max-height:500px;overflow-y:auto}
-  .map-and-info-container{flex:0 0 40%;display:flex;flex-direction:column;gap:15px}
-
-  /* ---------- table ---------- */
-  table{width:100%;border-collapse:collapse}
-  th,td{padding:12px 15px;text-align:left;border-bottom:1px solid #edf2f7}
-  th{background:#f8fafc;font-weight:600;color:#4A5568;position:sticky;top:0;z-index:10}
-  tr:last-child td{border-bottom:none}
-  .best-price{background:#E6FFFA;font-weight:600}
-  .best-price td{color:#285E61}
-  .runner-up-price{background:#FFFBEB}
-  .runner-up-price td{color:#744210}
-
-  /* capacity bar */
-  .fill-bar{background:#e9ecef;border-radius:4px;height:8px;width:100%}
-  .fill-bar>span{display:block;height:100%;border-radius:4px}
-
-  /* ---------- map ---------- */
-  .map-container{height:300px;background:#E0E7EF;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.08);overflow:hidden}
-  #sa-map{width:100%;height:100%}
-
-  /* ---------- info boxes ---------- */
-  .trip-info-container,.depot-comparison-container{background:#fff;padding:15px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
-  .trip-info-container h3,.depot-comparison-container h3{margin:0 0 10px;font-size:1.1em;color:#2C7A7B}
-  .trip-info-container p,.depot-comparison-container div,.depot-comparison-container p{margin:8px 0;font-size:.95em}
-  .depot-comparison-container select{padding:8px 10px;border:1px solid #cbd5e0;border-radius:6px;font-size:.9em;background:#fdfdfd;margin:0 10px 10px 0}
-  #depot-savings-display{font-weight:700;color:#2F855A}
-  #depot-savings-display.negative,#depot-savings-per-load-display.negative{color:#C53030}
-  #depot-savings-per-load-display{margin-top:5px;font-weight:700;color:#2C7A7B}
-
-  /* ---------- footer ---------- */
-  .footer-note{padding:10px 25px;background:#edf2f7;font-size:.85em;text-align:center;border-top:1px solid #e2e8f0;color:#718096}
-  </style>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 <div class="workspace">
@@ -95,11 +42,6 @@
           <thead>
             <tr>
               <th>Depot</th>
-              <th>Price (R/t)</th>
-              <th>Distance (km)</th>
-              <th>Haulage (R/t)</th>
-              <th>Landed (R/t)</th>
-              <th>Fill</th>
             </tr>
           </thead>
           <tbody id="depot-grid-body"></tbody>
@@ -110,26 +52,6 @@
       <div class="map-and-info-container">
         <div class="map-container"><div id="sa-map"></div></div>
 
-        <div class="trip-info-container">
-          <h3>Trip Details (to Best Depot)</h3>
-          <p><strong>Distance:</strong> <span id="trip-distance">N/A</span> km</p>
-          <p><strong>Travel Time:</strong> <span id="travel-time">N/A</span></p>
-        </div>
-
-        <div class="depot-comparison-container">
-          <h3>Depot Cost Comparison</h3>
-          <div>
-            <label for="depot-compare-A">Compare Depot:</label>
-            <select id="depot-compare-A"></select>
-          </div>
-          <div>
-            <label for="depot-compare-B">With Depot:</label>
-            <select id="depot-compare-B"></select>
-          </div>
-          <p><strong>Savings (Landed):</strong></p>
-          <div id="depot-savings-display">N/A</div>
-          <div id="depot-savings-per-load-display">N/A</div>
-        </div>
       </div>
     </div>
   </div>
@@ -138,131 +60,7 @@
     Calculations use haulage tariff: R<span id="haulage-tariff-display"></span> / ton-km.
   </footer>
 </div>
+  <script src="app.js"></script>
 
-<script>
-/* ---------- helpers ---------- */
-function dms(d,m,s,dir){let v=+d+(+m)/60+(+s)/3600;return(dir==="S"||dir==="W")?-v:v}
-function hav(lat1,lon1,lat2,lon2){const R=6371,t=x=>x*Math.PI/180;const dLat=t(lat2-lat1),dLon=t(lon2-lon1);
-  const a=Math.sin(dLat/2)**2+Math.cos(t(lat1))*Math.cos(t(lat2))*Math.sin(dLon/2)**2;
-  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));}
-function fmtTime(km,speed){if(!km)return"0 min";const m=Math.round(km/speed*60);return`${Math.floor(m/60)}h ${m%60}m`.replace(/^0h /,"");}
-
-/* ---------- data ---------- */
-const depots=[
-  {name:"Delpa",lat:dms(29,6,22.9,"S"),lon:dms(23,45,14.5,"E"),fill:.72},
-  {name:"De Vale",lat:dms(29,0,55.39,"S"),lon:dms(23,55,16.63,"E"),fill:.45},
-  {name:"Groot Saxony",lat:dms(28,27,43,"S"),lon:dms(27,13,34.9,"E"),fill:.38},
-  {name:"Help Mekaar",lat:dms(27,45,3.5,"S"),lon:dms(26,6,56.9,"E"),fill:.66},
-  {name:"Kleinhoek",lat:dms(28,11,20.2,"S"),lon:dms(26,6,9.7,"E"),fill:.93},
-  {name:"Mispah",lat:dms(27,50,47.75,"S"),lon:dms(26,12,22.84,"E"),fill:.54},
-  {name:"Sarbyn",lat:dms(27,55,6.7,"S"),lon:dms(25,46,38,"E"),fill:.61},
-  {name:"Schoongesight",lat:dms(28,18,44.5,"S"),lon:dms(26,24,20.7,"E"),fill:.82},
-  {name:"Sparta",lat:dms(28,34,52.6,"S"),lon:dms(27,29,9.9,"E"),fill:.25},
-  {name:"Theronia",lat:dms(27,30,25.2,"S"),lon:dms(26,24,34.82,"E"),fill:.68},
-  {name:"Vyf Susters",lat:dms(27,30,25.2,"S"),lon:dms(26,24,34.82,"E"),fill:.57}
-];
-
-const commodityPrices={
-  Maize:{base:3200,diff:{Delpa:0,"De Vale":-20,"Groot Saxony":50,"Help Mekaar":10,Kleinhoek:0,Mispah:-10,Sarbyn:30,Schoongesight:0,Sparta:40,Theronia:-5,"Vyf Susters":-5}},
-  Soybeans:{base:7500,diff:{Delpa:10,"De Vale":0,"Groot Saxony":-30,"Help Mekaar":20,Kleinhoek:0,Mispah:-20,Sarbyn:10,Schoongesight:0,Sparta:-15,Theronia:0,"Vyf Susters":0}},
-  Wheat:{base:4800,diff:{}}
-};
-
-const farms=[
-  {name:"Farm Alpha (Welkom)",    lat:dms(27,58,30,"S"),lon:dms(26,43,30,"E")},
-  {name:"Farm Bravo (Bloem)",     lat:dms(29,6,0,"S"),  lon:dms(26,13,0,"E")},
-  {name:"Farm Charlie (Kimberley)",lat:dms(28,44,0,"S"),lon:dms(24,46,0,"E")},
-  {name:"Farm Delta (Bethlehem)", lat:dms(28,14,0,"S"),lon:dms(28,18,0,"E")}
-];
-
-const cfg={haulRate:2.5,speed:70};
-
-/* ---------- DOM ---------- */
-const farmSel=document.getElementById("client-farm");
-const commSel=document.getElementById("commodity");
-const tonInput=document.getElementById("tonnage");
-const gridBody=document.getElementById("depot-grid-body");
-const tripDist=document.getElementById("trip-distance");
-const tripTime=document.getElementById("travel-time");
-const tariffDisp=document.getElementById("haulage-tariff-display");
-const compA=document.getElementById("depot-compare-A");
-const compB=document.getElementById("depot-compare-B");
-const saveDisp=document.getElementById("depot-savings-display");
-const saveLoadDisp=document.getElementById("depot-savings-per-load-display");
-
-/* ---------- map ---------- */
-const saMap=L.map("sa-map",{zoomControl:false}).setView([-28,25],6);
-L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:18,attribution:"© OSM"}).addTo(saMap);
-const markerLayer=L.layerGroup().addTo(saMap);
-const routeLayer=L.layerGroup().addTo(saMap);
-
-/* ---------- populate selectors ---------- */
-farms.forEach(f=>{let o=document.createElement("option");o.value=o.textContent=f.name;farmSel.appendChild(o)});
-Object.keys(commodityPrices).forEach(c=>{let o=document.createElement("option");o.value=o.textContent=c;commSel.appendChild(o)});
-[compA,compB].forEach(sel=>depots.forEach(d=>{let o=document.createElement("option");o.value=o.textContent=d.name;sel.appendChild(o)}));
-tariffDisp.textContent=cfg.haulRate.toFixed(2);
-
-/* ---------- core ---------- */
-let currentResults=[];
-function compute(){
-  const farm=farms.find(f=>f.name===farmSel.value);
-  const comm=commSel.value;
-  if(!farm||!comm){
-    gridBody.innerHTML="<tr><td colspan='6' style='text-align:center;padding:20px'>Select farm and commodity.</td></tr>";
-    markerLayer.clearLayers();routeLayer.clearLayers();currentResults=[];
-    tripDist.textContent=tripTime.textContent="N/A";updateCompare();return;
-  }
-  const info=commodityPrices[comm];
-  currentResults=depots.map(d=>{
-    const km=hav(farm.lat,farm.lon,d.lat,d.lon);
-    const haul=km*cfg.haulRate;
-    const price=info.base+(info.diff[d.name]||0);
-    return{...d,km,haul,landed:price+haul,price};
-  }).sort((a,b)=>a.landed-b.landed);
-
-  renderGrid();renderMap(farm);
-  const best=currentResults[0];
-  tripDist.textContent=best.km.toFixed(1);
-  tripTime.textContent=fmtTime(best.km,cfg.speed);
-  updateCompare();
-}
-function renderGrid(){
-  gridBody.innerHTML="";
-  currentResults.forEach((r,i)=>{
-    let tr=gridBody.insertRow();
-    tr.innerHTML=`<td>${r.name}</td><td>${r.price.toFixed(2)}</td><td>${r.km.toFixed(1)}</td><td>${r.haul.toFixed(2)}</td><td>${r.landed.toFixed(2)}</td>
-      <td><div class='fill-bar'><span style='width:${r.fill*100}%;background:${r.fill>0.9?"#dc3545":r.fill>0.7?"#ffc107":"#198754"}'></span></div></td>`;
-    if(i===0)tr.classList.add("best-price");else if(i===1)tr.classList.add("runner-up-price");
-  });
-}
-function renderMap(farm){
-  markerLayer.clearLayers();routeLayer.clearLayers();
-  L.circleMarker([farm.lat,farm.lon],{radius:8,weight:1,color:"#fff",fillColor:"#DD6B20",fillOpacity:1}).addTo(markerLayer).bindTooltip(farm.name);
-  currentResults.forEach((d,i)=>{
-    const clr=i===0?"#2F855A":i===1?"#D69E2E":"#3182CE";
-    L.circleMarker([d.lat,d.lon],{radius:7,weight:1,color:"#fff",fillColor:clr,fillOpacity:1})
-      .addTo(markerLayer).bindTooltip(`${d.name}\nR${d.landed.toFixed(2)} / ${d.km.toFixed(0)} km`);
-  });
-  let best=currentResults[0];L.polyline([[farm.lat,farm.lon],[best.lat,best.lon]],{color:"#2F855A",weight:3,dashArray:"6 3"}).addTo(routeLayer);
-  if(currentResults.length>1){let run=currentResults[1];L.polyline([[farm.lat,farm.lon],[run.lat,run.lon]],{color:"#D69E2E",weight:2,dashArray:"4 2",opacity:.8}).addTo(routeLayer);}
-  saMap.fitBounds(routeLayer.getBounds(),{padding:[30,30]});
-}
-/* ---------- comparison ---------- */
-function updateCompare(){
-  saveDisp.className=saveLoadDisp.className="";saveDisp.textContent=saveLoadDisp.textContent="N/A";
-  const a=currentResults.find(r=>r.name===compA.value),b=currentResults.find(r=>r.name===compB.value);
-  const tons=+tonInput.value||0;if(!a||!b||a.name===b.name)return;
-  const dveDisp.textContent=`R ${diff.toFixed(2)} per ton`;saveLoadDisp.textContent=`Total for ${tons} t: R ${load.toFixed(2)}`;
-  if(diff<0)saveDisp.classList.add("negative"),saveLoadDisp.classList.add("negative");
-}iff=b.landed-a.landed,load=diff*tons;
-  sa
-
-/* ---------- events ---------- */
-[farmSel,commSel,tonInput].forEach(el=>el.addEventListener("input",compute));
-[compA,compB].forEach(el=>el.addEventListener("input",updateCompare));
-
-/* ---------- init ---------- */
-farmSel.value=farms[0].name;commSel.value="Maize";compute();
-</script>
 </body>
 </html>
