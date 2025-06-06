@@ -6,19 +6,7 @@ function hav(lat1,lon1,lat2,lon2){const R=6371,t=x=>x*Math.PI/180;const dLat=t(l
 function fmtTime(km,speed){if(!km)return"0 min";const m=Math.round(km/speed*60);return`${Math.floor(m/60)}h ${m%60}m`.replace(/^0h /,"");}
 
 /* ---------- data ---------- */
-const depots=[
-  {name:"Delpa",lat:dms(29,6,22.9,"S"),lon:dms(23,45,14.5,"E"),fill:.72},
-  {name:"De Vale",lat:dms(29,0,55.39,"S"),lon:dms(23,55,16.63,"E"),fill:.45},
-  {name:"Groot Saxony",lat:dms(28,27,43,"S"),lon:dms(27,13,34.9,"E"),fill:.38},
-  {name:"Help Mekaar",lat:dms(27,45,3.5,"S"),lon:dms(26,6,56.9,"E"),fill:.66},
-  {name:"Kleinhoek",lat:dms(28,11,20.2,"S"),lon:dms(26,6,9.7,"E"),fill:.93},
-  {name:"Mispah",lat:dms(27,50,47.75,"S"),lon:dms(26,12,22.84,"E"),fill:.54},
-  {name:"Sarbyn",lat:dms(27,55,6.7,"S"),lon:dms(25,46,38,"E"),fill:.61},
-  {name:"Schoongesight",lat:dms(28,18,44.5,"S"),lon:dms(26,24,20.7,"E"),fill:.82},
-  {name:"Sparta",lat:dms(28,34,52.6,"S"),lon:dms(27,29,9.9,"E"),fill:.25},
-  {name:"Theronia",lat:dms(27,30,25.2,"S"),lon:dms(26,24,34.82,"E"),fill:.68},
-  {name:"Vyf Susters",lat:dms(27,30,25.2,"S"),lon:dms(26,24,34.82,"E"),fill:.57}
-];
+let depots=[];
 
 const commodityPrices={
   Maize:{base:3200,diff:{Delpa:0,"De Vale":-20,"Groot Saxony":50,"Help Mekaar":10,Kleinhoek:0,Mispah:-10,Sarbyn:30,Schoongesight:0,Sparta:40,Theronia:-5,"Vyf Susters":-5}},
@@ -26,12 +14,17 @@ const commodityPrices={
   Wheat:{base:4800,diff:{}}
 };
 
-const farms=[
-  {name:"Farm Alpha (Welkom)",    lat:dms(27,58,30,"S"),lon:dms(26,43,30,"E")},
-  {name:"Farm Bravo (Bloem)",     lat:dms(29,6,0,"S"),  lon:dms(26,13,0,"E")},
-  {name:"Farm Charlie (Kimberley)",lat:dms(28,44,0,"S"),lon:dms(24,46,0,"E")},
-  {name:"Farm Delta (Bethlehem)", lat:dms(28,14,0,"S"),lon:dms(28,18,0,"E")}
-];
+let farms=[];
+
+async function loadPoints(url){
+  const res=await fetch(url);
+  const text=await res.text();
+  return text.trim().split(/\r?\n/).map(l=>{
+    const m=l.trim().match(/^(-?\d+(?:\.\d+)?),\s*(-?\d+(?:\.\d+)?)(?:\s+)(.+)$/);
+    if(!m) return null;
+    return{lat:+m[1],lon:+m[2],name:m[3].trim()};
+  }).filter(Boolean);
+}
 
 const cfg={haulRate:2.5,speed:70};
 
@@ -49,9 +42,13 @@ const markerLayer=L.layerGroup().addTo(saMap);
 const routeLayer=L.layerGroup().addTo(saMap);
 
 /* ---------- populate selectors ---------- */
-farms.forEach(f=>{let o=document.createElement("option");o.value=o.textContent=f.name;farmSel.appendChild(o)});
-Object.keys(commodityPrices).forEach(c=>{let o=document.createElement("option");o.value=o.textContent=c;commSel.appendChild(o)});
-tariffDisp.textContent=cfg.haulRate.toFixed(2);
+function populateSelectors(){
+  farmSel.innerHTML="";
+  farms.forEach(f=>{let o=document.createElement("option");o.value=o.textContent=f.name;farmSel.appendChild(o)});
+  commSel.innerHTML="";
+  Object.keys(commodityPrices).forEach(c=>{let o=document.createElement("option");o.value=o.textContent=c;commSel.appendChild(o)});
+  tariffDisp.textContent=cfg.haulRate.toFixed(2);
+}
 
 /* ---------- core ---------- */
 let currentResults=[];
@@ -98,5 +95,15 @@ function renderMap(farm){
 /* ---------- events ---------- */
 [farmSel,commSel,tonInput].forEach(el=>el.addEventListener("input",compute));
 
-/* ---------- init ---------- */
-farmSel.value=farms[0].name;commSel.value="Maize";compute();
+async function init(){
+  [farms,depots]=await Promise.all([
+    loadPoints('producers.txt'),
+    loadPoints('processors.txt')
+  ]);
+  populateSelectors();
+  if(farms.length) farmSel.value=farms[0].name;
+  commSel.value="Maize";
+  compute();
+}
+
+init();
