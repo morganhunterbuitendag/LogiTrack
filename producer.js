@@ -43,15 +43,17 @@ function saveData(){
 
 async function importFromFile(){
   try{
-    const res = await fetch('producers.txt');
+    const res = await fetch('producers.json');
     if(!res.ok) return;
-    const text = await res.text();
-    const lines = text.trim().split(/\r?\n/);
-    producers = lines.map((l,i)=>{
-      const m=l.match(/^(-?\d+(?:\.\d+)?),\s*(-?\d+(?:\.\d+)?)(?:\s+)(.+)$/);
-      if(!m) return null;
-      return {id: nextId + i, lat:parseFloat(m[1]), lon:parseFloat(m[2]), name:m[3].trim(), distances:Array(10).fill(null)};
-    }).filter(Boolean);
+    const data = await res.json();
+    if(!Array.isArray(data)) return;
+    producers = data.map((obj,i)=>({
+      id: nextId + i,
+      lat: parseFloat(obj.lat),
+      lon: parseFloat(obj.lon),
+      name: obj.name,
+      distances: Array(10).fill(null)
+    }));
     nextId += producers.length;
     saveData();
   }catch(e){

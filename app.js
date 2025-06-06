@@ -54,12 +54,9 @@ async function loadPoints(url,fallback){
   try{
     const res=await fetch(url);
     if(!res.ok) throw new Error('bad');
-    const text=await res.text();
-    return text.trim().split(/\r?\n/).map(l=>{
-      const m=l.trim().match(/^(-?\d+(?:\.\d+)?),\s*(-?\d+(?:\.\d+)?)(?:\s+)(.+)$/);
-      if(!m) return null;
-      return{lat:+m[1],lon:+m[2],name:m[3].trim()};
-    }).filter(Boolean);
+    const data=await res.json();
+    if(!Array.isArray(data)) throw new Error('bad');
+    return data.map(o=>({lat:+o.lat,lon:+o.lon,name:o.name}));
   }catch(e){
     return fallback;
   }
@@ -148,8 +145,8 @@ function renderMap(farm){
 
 async function init(){
   [farms,depots]=await Promise.all([
-    loadPoints('producers.txt', DEFAULT_FARMS),
-    loadPoints('processors.txt', DEFAULT_DEPOTS)
+    loadPoints('producers.json', DEFAULT_FARMS),
+    loadPoints('processors.json', DEFAULT_DEPOTS)
   ]);
   populateSelectors();
   renderAllProducers();
