@@ -12,6 +12,11 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 
+app.get('/config.js', (req, res) => {
+  const key = process.env.ORS_KEY || '';
+  res.type('application/javascript').send(`window.ORS_KEY=${JSON.stringify(key)};`);
+});
+
 async function ensureDir(){
   await fs.mkdir(DATA_DIR, {recursive: true});
 }
