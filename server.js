@@ -133,7 +133,7 @@ app.post('/api/auth/login', async (req,res)=>{
     const users = await readArray('users.json');
     const user = users.find(u=>u.email===email);
     if(!user) return res.status(401).json({error:'invalid'});
-    if(user.role !== 'member') return res.status(403).json({error:'pending'});
+    if(!['member','admin'].includes(user.role)) return res.status(403).json({error:'pending'});
     if(user.passwordHash !== passwordHash) return res.status(401).json({error:'invalid'});
     const token = jwt.sign({email:user.email,role:user.role}, JWT_SECRET,{expiresIn:'1h'});
     res.cookie('auth',token,{httpOnly:true,sameSite:'lax'});
@@ -155,7 +155,7 @@ app.get('/api/auth/check', (req,res)=>{
   }
 });
 
-app.use(express.static(process.cwd(), { index: 'Index.html' }));
+app.use(express.static(process.cwd(), { index: 'login.html' }));
 
 app.listen(PORT, () => {
   console.log(`API listening on http://localhost:${PORT}`);
