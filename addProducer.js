@@ -53,7 +53,7 @@ function showToast(msg){
 }
 
 let fab, addModalEl, addModal, distModalEl, distModal, toastEl, toast;
-let nameInput, locInput, addBtn, grid, uploadBtn, distCancel;
+let nameInput, locInput, addBtn, grid, uploadBtn, distCancel, distName;
 let pendingLocation = null;
 let currentDistances = null;
 
@@ -73,6 +73,7 @@ if (typeof document !== 'undefined') {
   grid = document.getElementById('distance-grid');
   uploadBtn = document.getElementById('distance-upload');
   distCancel = document.getElementById('distance-cancel');
+  distName = document.getElementById('distance-producer');
 }
 
 function validateForm(){
@@ -124,7 +125,9 @@ if (typeof document !== 'undefined') {
     validateForm();
     if (addBtn.disabled) return;
     addModal.hide();
-    buildGrid();
+    const name = nameInput.value.trim();
+    distName.textContent = name;
+    buildGrid(name);
     uploadBtn.disabled = true;
     distModal.show();
     currentDistances = await loadDistances();
@@ -133,31 +136,42 @@ if (typeof document !== 'undefined') {
 
 }
 
-function buildGrid(){
+function buildGrid(prodName=''){ 
   grid.innerHTML='';
-  const header = document.createElement('div');
-  header.className='d-grid mb-2';
-  const row = document.createElement('div');
-  row.className='d-flex gap-2';
-  processors.forEach(p=>{
-    const div = document.createElement('div');
-    div.className='flex-fill fw-semibold text-center';
-    div.textContent=p.name;
-    row.appendChild(div);
-  });
-  header.appendChild(row);
-  grid.appendChild(header);
+  const table=document.createElement('table');
+  table.className='table table-sm';
 
-  const row2 = document.createElement('div');
-  row2.className='d-flex gap-2';
+  const thead=document.createElement('thead');
+  const headRow=document.createElement('tr');
+  headRow.appendChild(document.createElement('th'));
+  processors.forEach(p=>{
+    const th=document.createElement('th');
+    th.className='text-center';
+    th.textContent=p.name;
+    headRow.appendChild(th);
+  });
+  thead.appendChild(headRow);
+  table.appendChild(thead);
+
+  const tbody=document.createElement('tbody');
+  const row=document.createElement('tr');
+  const nameCell=document.createElement('th');
+  nameCell.scope='row';
+  nameCell.className='text-nowrap';
+  nameCell.textContent=prodName;
+  row.appendChild(nameCell);
   processors.forEach(()=>{
-    const inp = document.createElement('input');
+    const td=document.createElement('td');
+    const inp=document.createElement('input');
     inp.readOnly=true;
     inp.className='form-control text-center';
     inp.value='…';
-    row2.appendChild(inp);
+    td.appendChild(inp);
+    row.appendChild(td);
   });
-  grid.appendChild(row2);
+  tbody.appendChild(row);
+  table.appendChild(tbody);
+  grid.appendChild(table);
 }
 
 async function loadDistances(){
@@ -199,6 +213,7 @@ uploadBtn.addEventListener('click',async ()=>{
     showToast('\u271A Producer added \u2026');
     nameInput.value='';
     locInput.value='';
+    distName.textContent='';
     currentDistances=null;
   }catch(err){
     alert('Upload failed');
@@ -212,6 +227,7 @@ distCancel.addEventListener('click',()=>{
   addModal.show();
   uploadBtn.disabled=true;
   grid.innerHTML='';
+  distName.textContent='';
   currentDistances=null;
 });
 }
