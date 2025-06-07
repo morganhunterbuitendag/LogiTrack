@@ -198,7 +198,7 @@ uploadBtn.addEventListener('click',async ()=>{
   if(!currentDistances){ uploadBtn.disabled=false; return; }
   const payload={producer:prod.name,distances:currentDistances,producerRecord:prod};
   try{
-    await fetch('http://localhost:3101/api/distances',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    await fetch('/api/distances',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
     distModal.hide();
     showToast('\u271A Producer added \u2026');
     nameInput.value='';

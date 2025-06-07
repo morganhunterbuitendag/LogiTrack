@@ -4,6 +4,7 @@
   "description": "logisticks distance caluclator",
   "main": "addProducer.js",
   "scripts": {
+    "start": "node server.js",
     "test": "NODE_OPTIONS=--experimental-vm-modules jest"
   },
   "keywords": [],
