@@ -16,8 +16,15 @@ const cancelBtn = form.querySelector('.cancel');
 const deleteDialog = document.getElementById('delete-dialog');
 const confirmDeleteBtn = deleteDialog.querySelector('.confirm');
 const cancelDeleteBtn = deleteDialog.querySelector('.cancel');
+const distDialog = document.getElementById('distance-dialog');
+const distName = document.getElementById('distance-producer');
+const distGrid = document.getElementById('distance-grid');
+const distUploadBtn = distDialog.querySelector('.upload');
+const distCancelBtn = distDialog.querySelector('.cancel');
 let deleteIndex = null;
 let producers = [];
+let processors = [];
+let pendingProducer = null;
 
 async function loadProducers(){
   const cached = localStorage.getItem('producers');
@@ -48,6 +55,69 @@ async function loadProducers(){
     }
   }
   localStorage.setItem('producers', JSON.stringify(producers));
+}
+
+async function loadProcessors(){
+  try{
+    const res = await fetch('processors.json',{cache:'no-store'});
+    if(res.ok) processors = await res.json();
+  }catch{}
+  if(!Array.isArray(processors)) processors = [];
+}
+
+function buildGrid(){
+  distGrid.innerHTML='';
+  const head=document.createElement('div');
+  head.className='grid mb-2';
+  const row=document.createElement('div');
+  row.className='flex gap-2';
+  processors.forEach(p=>{
+    const div=document.createElement('div');
+    div.className='flex-1 font-semibold text-center';
+    div.textContent=p.name;
+    row.appendChild(div);
+  });
+  head.appendChild(row);
+  distGrid.appendChild(head);
+
+  const row2=document.createElement('div');
+  row2.className='flex gap-2';
+  processors.forEach(()=>{
+    const inp=document.createElement('input');
+    inp.readOnly=true;
+    inp.className='border rounded px-2 py-1 flex-1 text-center';
+    inp.value='…';
+    row2.appendChild(inp);
+  });
+  distGrid.appendChild(row2);
+}
+
+async function getDistances(origin,depots){
+  const key = window.ORS_KEY;
+  if(!key) return [];
+  const body={locations:[origin,...depots],sources:[0],destinations:depots.map((_,i)=>i+1),metrics:['distance'],units:'km'};
+  const res = await fetch('https://api.openrouteservice.org/v2/matrix/driving-car',{method:'POST',headers:{'Authorization':key,'Content-Type':'application/json'},body:JSON.stringify(body)});
+  if(!res.ok) return [];
+  const data=await res.json();
+  const dists=data.distances && data.distances[0];
+  return Array.isArray(dists)?dists:[];
+}
+
+async function loadDistances(){
+  if(!pendingProducer) return;
+  const origin=[pendingProducer.lon,pendingProducer.lat];
+  const depots=processors.map(p=>[p.lon,p.lat]);
+  const vals=await getDistances(origin,depots);
+  const inputs=distGrid.querySelectorAll('input');
+  vals.forEach((v,i)=>{
+    const inp=inputs[i];
+    if(v==null){
+      inp.value='';
+      inp.classList.add('border-red-500');
+    }else{
+      inp.value=Number(v).toFixed(2);
+    }
+  });
 }
 
 function renderList(){
@@ -116,21 +186,38 @@ confirmDeleteBtn.addEventListener('click',()=>{
   deleteIndex = null;
 });
 
-form.addEventListener('submit',e=>{
+form.addEventListener('submit',async e=>{
   e.preventDefault();
-  const parts=locInput.value.split(/[,\s]+/);
+  const parts=locInput.value.split(/[ ,\s]+/);
   const lat=parseFloat(parts[0]);
   const lon=parseFloat(parts[1]);
   if(!nameInput.value.trim() || isNaN(lat) || isNaN(lon)) return;
+  pendingProducer={name:nameInput.value.trim(),lat,lon};
+  distName.textContent=pendingProducer.name;
+  buildGrid();
+  await loadDistances();
+  modal.close();
+  distDialog.showModal();
+});
+
+distCancelBtn.addEventListener('click',()=>{
+  distDialog.close();
+  pendingProducer=null;
+  modal.showModal();
+});
+
+distUploadBtn.addEventListener('click',()=>{
+  if(!pendingProducer) return;
   if(form.dataset.index!==undefined){
     const idx=Number(form.dataset.index);
-    producers[idx]={name:nameInput.value.trim(),lat,lon};
+    producers[idx]=pendingProducer;
   }else{
-    producers.push({name:nameInput.value.trim(),lat,lon});
+    producers.push(pendingProducer);
   }
   persistProducers();
   renderList();
-  modal.close();
+  pendingProducer=null;
+  distDialog.close();
 });
 
 function persistProducers(){
@@ -142,5 +229,6 @@ function persistProducers(){
 
 (async function init(){
   await loadProducers();
+  await loadProcessors();
   renderList();
 })();
