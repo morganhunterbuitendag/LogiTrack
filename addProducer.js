@@ -119,20 +119,16 @@ if (typeof document !== 'undefined') {
 
   document.querySelector('#add-producer-modal .btn-secondary').addEventListener('click',()=>addModal.hide());
 
-  addBtn.addEventListener('click',async (e)=>{
+  addBtn.addEventListener('click', async (e) => {
     e.preventDefault();
     validateForm();
-    if(addBtn.disabled) return;
+    if (addBtn.disabled) return;
     addModal.hide();
     buildGrid();
     uploadBtn.disabled = true;
-    currentDistances = await loadDistances();
-    if(!currentDistances){
-      uploadBtn.disabled = false;
-      return;
-    }
-    uploadBtn.disabled = false;
     distModal.show();
+    currentDistances = await loadDistances();
+    uploadBtn.disabled = false;
   });
 
 }
