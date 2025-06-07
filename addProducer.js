@@ -109,11 +109,10 @@ if (typeof document !== 'undefined') {
 
   document.querySelector('#add-producer-modal .btn-secondary').addEventListener('click',()=>addModal.hide());
 
-  addBtn.addEventListener('click',async ()=>{
+  addBtn.addEventListener('click',()=>{
     addModal.hide();
     buildGrid();
     distModal.show();
-    await loadDistances();
   });
 
 }
@@ -146,42 +145,48 @@ function buildGrid(){
 }
 
 async function loadDistances(){
-  uploadBtn.disabled=true;
-  if(!pendingLocation) return;
+  if(!pendingLocation) return null;
   const origin=[pendingLocation.lng,pendingLocation.lat];
   const depots=processors.map(p=>[p.lon,p.lat]);
   try{
     const vals = await getDistances(origin,depots);
     const inputs = grid.querySelectorAll('input');
-    let ok=true;
+    const result={};
     vals.forEach((v,i)=>{
-      const inp = inputs[i];
+      const inp=inputs[i];
       if(v==null){
         inp.value='';
         inp.classList.add('border-danger');
-        ok=false;
+        result[processors[i].name]=null;
       }else{
-        inp.value=Number(v).toFixed(2);
+        const n=Number(v).toFixed(2);
+        inp.value=n;
+        result[processors[i].name]=+n;
       }
     });
-    uploadBtn.disabled=!ok;
+    return result;
   }catch(err){
     alert('Failed to fetch distances');
+    return null;
   }
 }
 
 if (typeof document !== 'undefined') {
 uploadBtn.addEventListener('click',async ()=>{
-  const inputs = grid.querySelectorAll('input');
-  const distances={};
-  inputs.forEach((inp,i)=>{
-    distances[processors[i].name]=+inp.value;
-  });
+  uploadBtn.disabled=true;
   const prod={name:nameInput.value.trim(),location:`${pendingLocation.lat},${pendingLocation.lng}`};
-  await appendJSON('producers.json',prod);
-  await appendJSON('distances.json',{producer:prod.name,distances});
-  distModal.hide();
-  alert('\u271A Producer added and distance matrix updated.');
+  const distances=await loadDistances();
+  if(!distances) { uploadBtn.disabled=false; return; }
+  const payload={producer:prod.name,distances,producerRecord:prod};
+  try{
+    await fetch('http://localhost:3101/api/distances',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    distModal.hide();
+    alert('\u271A Producer added and distance matrix updated.');
+  }catch(err){
+    alert('Upload failed');
+  }finally{
+    uploadBtn.disabled=false;
+  }
 });
 
 distCancel.addEventListener('click',()=>{
