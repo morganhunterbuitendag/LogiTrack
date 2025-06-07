@@ -17,7 +17,7 @@ form.addEventListener('submit', async e => {
     body: JSON.stringify({email: emailInput.value.trim(), passwordHash})
   });
   if(res.ok){
-    location.href = 'board.html';
+    location.href = 'Index.html';
   }else if(res.status === 403){
     let data = null;
     try{ data = await res.json(); }catch{}
