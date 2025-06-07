@@ -4,7 +4,7 @@ import path from 'path';
 import cookieParser from 'cookie-parser';
 import jwt from 'jsonwebtoken';
 
-const PORT = 3101;
+const PORT = process.env.PORT || 3101;
 const DATA_DIR = path.join(process.cwd(), 'data');
 const JWT_SECRET = 'change_this_secret';
 
@@ -154,6 +154,8 @@ app.get('/api/auth/check', (req,res)=>{
     res.status(401).end();
   }
 });
+
+app.use(express.static(process.cwd(), { index: 'Index.html' }));
 
 app.listen(PORT, () => {
   console.log(`API listening on http://localhost:${PORT}`);
