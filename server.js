@@ -103,7 +103,14 @@ app.post('/api/pending-users/:id/approve', async (req,res)=>{
     const record = pending.splice(idx,1)[0];
     await writeArray('pending-users.json', pending);
     const users = await readArray('users.json');
-    users.push({id:record.id,email:record.email,passwordHash:record.passwordHash,role:'member',created:new Date().toISOString()});
+    users.push({
+      id: record.id,
+      email: record.email,
+      passwordHash: record.passwordHash,
+      role: 'member',
+      created: new Date().toISOString(),
+      active: true
+    });
     await writeArray('users.json', users);
     res.json({ok:true});
   }catch(err){
@@ -127,6 +134,46 @@ app.post('/api/pending-users/:id/reject', async (req,res)=>{
   }
 });
 
+app.get('/api/users', async (req,res) => {
+  try{
+    const users = await readArray('users.json');
+    res.json(users);
+  }catch(err){
+    console.error(err);
+    res.status(500).json({error:'server error'});
+  }
+});
+
+app.post('/api/users/:id/activate', async (req,res)=>{
+  try{
+    const {id} = req.params;
+    const users = await readArray('users.json');
+    const user = users.find(u=>u.id===id);
+    if(!user) return res.sendStatus(404);
+    user.active = true;
+    await writeArray('users.json', users);
+    res.json({ok:true});
+  }catch(err){
+    console.error(err);
+    res.status(500).json({error:'server error'});
+  }
+});
+
+app.post('/api/users/:id/deactivate', async (req,res)=>{
+  try{
+    const {id} = req.params;
+    const users = await readArray('users.json');
+    const user = users.find(u=>u.id===id);
+    if(!user) return res.sendStatus(404);
+    user.active = false;
+    await writeArray('users.json', users);
+    res.json({ok:true});
+  }catch(err){
+    console.error(err);
+    res.status(500).json({error:'server error'});
+  }
+});
+
 app.post('/api/auth/login', async (req,res)=>{
   try{
     const {email,passwordHash} = req.body || {};
@@ -134,6 +181,7 @@ app.post('/api/auth/login', async (req,res)=>{
     const user = users.find(u=>u.email===email);
     if(!user) return res.status(401).json({error:'invalid'});
     if(!['member','admin'].includes(user.role)) return res.status(403).json({error:'pending'});
+    if(user.active === false) return res.status(403).json({error:'inactive'});
     if(user.passwordHash !== passwordHash) return res.status(401).json({error:'invalid'});
     const token = jwt.sign({email:user.email,role:user.role}, JWT_SECRET,{expiresIn:'1h'});
     res.cookie('auth',token,{httpOnly:true,sameSite:'lax'});

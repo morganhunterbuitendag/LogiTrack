@@ -19,7 +19,15 @@ form.addEventListener('submit', async e => {
   if(res.ok){
     location.href = 'board.html';
   }else if(res.status === 403){
-    errorEl.textContent = "Your registration hasn't been approved yet.";
+    let data = null;
+    try{ data = await res.json(); }catch{}
+    if(data && data.error === 'pending'){
+      errorEl.textContent = "Your registration hasn't been approved yet.";
+    }else if(data && data.error === 'inactive'){
+      errorEl.textContent = 'Your account is inactive.';
+    }else{
+      errorEl.textContent = 'Access denied';
+    }
   }else{
     errorEl.textContent = 'Invalid credentials';
   }
