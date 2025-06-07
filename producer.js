@@ -67,29 +67,41 @@ async function loadProcessors(){
 
 function buildGrid(){
   distGrid.innerHTML='';
-  const head=document.createElement('div');
-  head.className='grid mb-2';
-  const row=document.createElement('div');
-  row.className='flex gap-2';
-  processors.forEach(p=>{
-    const div=document.createElement('div');
-    div.className='flex-1 font-semibold text-center';
-    div.textContent=p.name;
-    row.appendChild(div);
-  });
-  head.appendChild(row);
-  distGrid.appendChild(head);
+  const table=document.createElement('table');
+  table.className='table table-sm w-full';
 
-  const row2=document.createElement('div');
-  row2.className='flex gap-2';
+  const thead=document.createElement('thead');
+  const headRow=document.createElement('tr');
+  headRow.appendChild(document.createElement('th'));
+  processors.forEach(p=>{
+    const th=document.createElement('th');
+    th.className='text-center';
+    th.textContent=p.name;
+    headRow.appendChild(th);
+  });
+  thead.appendChild(headRow);
+  table.appendChild(thead);
+
+  const tbody=document.createElement('tbody');
+  const row=document.createElement('tr');
+  const nameCell=document.createElement('th');
+  nameCell.scope='row';
+  nameCell.className='text-nowrap';
+  nameCell.textContent=pendingProducer?pendingProducer.name:'';
+  row.appendChild(nameCell);
   processors.forEach(()=>{
+    const td=document.createElement('td');
     const inp=document.createElement('input');
     inp.readOnly=true;
-    inp.className='border rounded px-2 py-1 flex-1 text-center';
+    inp.className='border rounded px-2 py-1 w-full text-center';
     inp.value='…';
-    row2.appendChild(inp);
+    td.appendChild(inp);
+    row.appendChild(td);
   });
-  distGrid.appendChild(row2);
+  tbody.appendChild(row);
+  table.appendChild(tbody);
+
+  distGrid.appendChild(table);
 }
 
 async function getDistances(origin,depots){
