@@ -1,1 +1,9 @@
-[]
+[
+  {
+    "id": "1749297065968",
+    "email": "morganbuitendag@gmail.com",
+    "passwordHash": "83ff169c308203aea1d524db7753b436dbfc74c258f39ff74ff8882df05d3045",
+    "role": "admin",
+    "created": "2025-06-07T11:57:35.776Z"
+  }
+]
