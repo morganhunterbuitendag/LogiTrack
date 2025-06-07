@@ -24,6 +24,7 @@ html,body{margin:0;height:100%;font-family:-apple-system,BlinkMacSystemFont,"Seg
 .sidebar ul{list-style:none;margin:0;padding:0}
 .sidebar li{font-weight:500}
 .content-area{flex:1;display:flex;flex-direction:column}
+#admin-container{flex:1;display:none}
 
 /* ---------- table ---------- */
 table{width:100%;border-collapse:collapse}
