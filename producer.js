@@ -186,18 +186,18 @@ confirmDeleteBtn.addEventListener('click',()=>{
   deleteIndex = null;
 });
 
-form.addEventListener('submit',async e=>{
+form.addEventListener('submit', async e => {
   e.preventDefault();
-  const parts=locInput.value.split(/[ ,\s]+/);
-  const lat=parseFloat(parts[0]);
-  const lon=parseFloat(parts[1]);
-  if(!nameInput.value.trim() || isNaN(lat) || isNaN(lon)) return;
-  pendingProducer={name:nameInput.value.trim(),lat,lon};
-  distName.textContent=pendingProducer.name;
+  const parts = locInput.value.split(/[ ,\s]+/);
+  const lat = parseFloat(parts[0]);
+  const lon = parseFloat(parts[1]);
+  if (!nameInput.value.trim() || isNaN(lat) || isNaN(lon)) return;
+  pendingProducer = {name: nameInput.value.trim(), lat, lon};
+  distName.textContent = pendingProducer.name;
   buildGrid();
-  await loadDistances();
   modal.close();
   distDialog.showModal();
+  await loadDistances();
 });
 
 distCancelBtn.addEventListener('click',()=>{
