@@ -47,12 +47,14 @@ function clearError(input){
 }
 
 function showToast(msg){
-  if(!toast) return;
-  toastEl.querySelector('.toast-body').textContent = msg;
-  toast.show();
+  if(!toastEl) return;
+  toastEl.textContent = msg;
+  toastEl.classList.remove('hidden');
+  clearTimeout(toast);
+  toast = setTimeout(()=>toastEl.classList.add('hidden'),3000);
 }
 
-let fab, addModalEl, addModal, distModalEl, distModal, toastEl, toast;
+let fab, addModalEl, distModalEl, toastEl, toast;
 let nameInput, locInput, addBtn, grid, uploadBtn, distCancel, distName;
 let pendingLocation = null;
 let currentDistances = null;
@@ -60,12 +62,9 @@ let currentDistances = null;
 if (typeof document !== 'undefined') {
   fab = document.getElementById('add-producer-fab');
   addModalEl = document.getElementById('add-producer-modal');
-  addModal = new bootstrap.Modal(addModalEl);
   distModalEl = document.getElementById('distance-preview-modal');
-  distModal = new bootstrap.Modal(distModalEl,{backdrop:'static'});
 
   toastEl = document.getElementById('app-toast');
-  if(toastEl) toast = new bootstrap.Toast(toastEl);
 
   nameInput = document.getElementById('producer-name');
   locInput = document.getElementById('producer-location');
@@ -115,21 +114,21 @@ if (typeof document !== 'undefined') {
     locInput.value='';
     clearError(nameInput);clearError(locInput);
     addBtn.disabled=true;
-    addModal.show();
+    addModalEl.showModal();
   });
 
-  document.querySelector('#add-producer-modal .btn-secondary').addEventListener('click',()=>addModal.hide());
+  document.querySelector('#add-producer-modal .cancel').addEventListener('click',()=>addModalEl.close());
 
   addBtn.addEventListener('click', async (e) => {
     e.preventDefault();
     validateForm();
     if (addBtn.disabled) return;
-    addModal.hide();
+    addModalEl.close();
     const name = nameInput.value.trim();
     distName.textContent = name;
     buildGrid(name);
     uploadBtn.disabled = true;
-    distModal.show();
+    distModalEl.showModal();
     currentDistances = await loadDistances();
     uploadBtn.disabled = false;
   });
@@ -139,7 +138,7 @@ if (typeof document !== 'undefined') {
 function buildGrid(prodName=''){ 
   grid.innerHTML='';
   const table=document.createElement('table');
-  table.className='table table-sm';
+  table.className='';
 
   const thead=document.createElement('thead');
   const headRow=document.createElement('tr');
@@ -164,7 +163,7 @@ function buildGrid(prodName=''){
     const td=document.createElement('td');
     const inp=document.createElement('input');
     inp.readOnly=true;
-    inp.className='form-control text-center';
+    inp.className='border border-slate-300 rounded px-2 py-1 text-center w-full';
     inp.value='…';
     td.appendChild(inp);
     row.appendChild(td);
@@ -186,7 +185,7 @@ async function loadDistances(){
       const inp=inputs[i];
       if(v==null){
         inp.value='';
-        inp.classList.add('border-danger');
+        inp.classList.add('border-red-600');
         result[processors[i].name]=null;
       }else{
         const n=Number(v).toFixed(2);
@@ -209,7 +208,7 @@ uploadBtn.addEventListener('click',async ()=>{
   const payload={producer:prod.name,distances:currentDistances,producerRecord:prod};
   try{
     await fetch('/api/distances',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
-    distModal.hide();
+    distModalEl.close();
     showToast('\u271A Producer added \u2026');
     nameInput.value='';
     locInput.value='';
@@ -223,8 +222,8 @@ uploadBtn.addEventListener('click',async ()=>{
 });
 
 distCancel.addEventListener('click',()=>{
-  distModal.hide();
-  addModal.show();
+  distModalEl.close();
+  addModalEl.showModal();
   uploadBtn.disabled=true;
   grid.innerHTML='';
   distName.textContent='';

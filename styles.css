@@ -63,3 +63,9 @@ dialog .actions{display:flex;justify-content:flex-end;gap:.75rem;margin-top:1.5r
 #delete-dialog{padding:2rem;min-width:420px;}
 #delete-dialog p{margin:0;}
 #delete-dialog .actions{display:flex;justify-content:flex-end;gap:.75rem;margin-top:1.5rem}
+
+.is-invalid{border-color:#dc2626;}
+.invalid-feedback{color:#dc2626;font-size:0.875rem;}
+.toast{position:fixed;bottom:1rem;right:1rem;padding:0.5rem 1rem;background:#16a34a;color:#fff;border-radius:0.5rem;box-shadow:0 2px 6px rgba(0,0,0,.15);}
+.toast.hidden{display:none;}
+

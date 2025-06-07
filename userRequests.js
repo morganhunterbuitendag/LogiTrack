@@ -1,6 +1,5 @@
-let toast;
+let toastTimer;
 const toastEl = document.getElementById('app-toast');
-if(toastEl) toast = new bootstrap.Toast(toastEl);
 const body = document.querySelector('#requests-table tbody');
 
 async function load(){
@@ -15,8 +14,8 @@ async function load(){
   list.forEach(r=>{
     const tr = document.createElement('tr');
     tr.innerHTML = `<td>${r.email}</td><td>${new Date(r.requested).toLocaleString()}</td>`+
-      `<td><button class="btn btn-sm btn-success" data-id="${r.id}" data-act="ap">Approve</button></td>`+
-      `<td><button class="btn btn-sm btn-danger" data-id="${r.id}" data-act="re">Reject</button></td>`;
+      `<td><button class="px-2 py-1 text-white text-sm rounded bg-green-600" data-id="${r.id}" data-act="ap">Approve</button></td>`+
+      `<td><button class="px-2 py-1 text-white text-sm rounded bg-red-600" data-id="${r.id}" data-act="re">Reject</button></td>`;
     body.appendChild(tr);
   });
 }
@@ -28,9 +27,11 @@ body.parentElement.addEventListener('click', async e=>{
   const act = btn.getAttribute('data-act');
   const res = await fetch(`/api/pending-users/${id}/${act==='ap'?'approve':'reject'}`,{method:'POST'});
   if(res.ok){
-    if(toast){
-      toastEl.querySelector('.toast-body').textContent = act==='ap'? 'Approved':'Rejected';
-      toast.show();
+    if(toastEl){
+      toastEl.textContent = act==='ap'? 'Approved':'Rejected';
+      toastEl.classList.remove('hidden');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(()=>toastEl.classList.add('hidden'),3000);
     }
     load();
   }
