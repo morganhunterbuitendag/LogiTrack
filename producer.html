@@ -21,6 +21,7 @@
     .producer-row button.delete{background:#E53E3E;color:#fff;border:none;border-radius:4px;padding:4px 8px;cursor:pointer;margin-left:6px}
     dialog::backdrop{background:rgba(0,0,0,.3);backdrop-filter:blur(2px)}
     dialog{background:#fff;border:none;border-radius:12px;padding:24px;max-width:700px;box-shadow:0 10px 25px rgba(0,0,0,.15);opacity:0;transform:scale(.95);transition:transform .2s ease-out,opacity .2s ease-out}
+    #distance-dialog{padding:32px;max-width:900px}
     dialog[open]{opacity:1;transform:scale(1)}
     dialog label{display:block;font-weight:600;color:#1e293b;margin-top:16px}
     dialog label:first-child{margin-top:0}
@@ -28,8 +29,9 @@
     dialog .actions{display:flex;justify-content:flex-end;gap:8px;margin-top:20px}
     dialog .actions button{background:#3182CE;color:#fff;border:none;border-radius:8px;padding:8px 16px;cursor:pointer;font-size:.9em}
     dialog .actions .cancel{background:#e2e8f0;color:#2D3748}
-    #distance-grid table{width:100%;table-layout:fixed;border-collapse:collapse}
-    #distance-grid th,#distance-grid td{padding:4px;text-align:center}
+    #distance-grid{overflow-x:auto;margin-top:16px;margin-bottom:16px}
+    #distance-grid table{width:100%;table-layout:auto;border-collapse:collapse}
+    #distance-grid th,#distance-grid td{padding:8px;text-align:center;white-space:nowrap}
     #distance-grid input{width:100%}
   </style>
 </head>
