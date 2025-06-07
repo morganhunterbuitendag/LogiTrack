@@ -1,0 +1,16 @@
+{
+  "name": "logitrack",
+  "version": "1.0.0",
+  "description": "logisticks distance caluclator",
+  "main": "addProducer.js",
+  "scripts": {
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}
