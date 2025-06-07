@@ -1,6 +1,5 @@
-let toast;
+let toastTimer;
 const toastEl = document.getElementById('app-toast');
-if(toastEl) toast = new bootstrap.Toast(toastEl);
 const usersBody = document.querySelector('#users-table tbody');
 
 async function load(){
@@ -14,11 +13,13 @@ async function load(){
   }
   list.forEach(u=>{
     const tr = document.createElement('tr');
+    const btnClass = u.active!==false ? 'bg-yellow-500' : 'bg-green-600';
+    const btnLabel = u.active!==false ? 'Deactivate' : 'Activate';
     tr.innerHTML = `<td>${u.email}</td><td>${u.role}</td>`+
       `<td>${u.active!==false?'Active':'Inactive'}</td>`+
-      `<td><button class="btn btn-sm ${u.active!==false?'btn-warning':'btn-success'}" `+
+      `<td><button class="text-white text-sm px-2 py-1 rounded ${btnClass}" `+
       `data-id="${u.id}" data-act="${u.active!==false?'deact':'act'}">`+
-      `${u.active!==false?'Deactivate':'Activate'}</button></td>`;
+      `${btnLabel}</button></td>`;
     usersBody.appendChild(tr);
   });
 }
@@ -30,9 +31,11 @@ usersBody.parentElement.addEventListener('click', async e=>{
   const act = btn.getAttribute('data-act');
   const res = await fetch(`/api/users/${id}/${act==='deact'?'deactivate':'activate'}`,{method:'POST'});
   if(res.ok){
-    if(toast){
-      toastEl.querySelector('.toast-body').textContent = act==='deact'? 'Deactivated':'Activated';
-      toast.show();
+    if(toastEl){
+      toastEl.textContent = act==='deact'? 'Deactivated':'Activated';
+      toastEl.classList.remove('hidden');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(()=>toastEl.classList.add('hidden'),3000);
     }
     load();
   }
