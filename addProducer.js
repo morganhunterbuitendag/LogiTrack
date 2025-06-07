@@ -46,9 +46,16 @@ function clearError(input){
   input.nextElementSibling.textContent='';
 }
 
-let fab, addModalEl, addModal, distModalEl, distModal;
+function showToast(msg){
+  if(!toast) return;
+  toastEl.querySelector('.toast-body').textContent = msg;
+  toast.show();
+}
+
+let fab, addModalEl, addModal, distModalEl, distModal, toastEl, toast;
 let nameInput, locInput, addBtn, grid, uploadBtn, distCancel;
 let pendingLocation = null;
+let currentDistances = null;
 
 if (typeof document !== 'undefined') {
   fab = document.getElementById('add-producer-fab');
@@ -56,6 +63,9 @@ if (typeof document !== 'undefined') {
   addModal = new bootstrap.Modal(addModalEl);
   distModalEl = document.getElementById('distance-preview-modal');
   distModal = new bootstrap.Modal(distModalEl,{backdrop:'static'});
+
+  toastEl = document.getElementById('app-toast');
+  if(toastEl) toast = new bootstrap.Toast(toastEl);
 
   nameInput = document.getElementById('producer-name');
   locInput = document.getElementById('producer-location');
@@ -109,9 +119,19 @@ if (typeof document !== 'undefined') {
 
   document.querySelector('#add-producer-modal .btn-secondary').addEventListener('click',()=>addModal.hide());
 
-  addBtn.addEventListener('click',()=>{
+  addBtn.addEventListener('click',async (e)=>{
+    e.preventDefault();
+    validateForm();
+    if(addBtn.disabled) return;
     addModal.hide();
     buildGrid();
+    uploadBtn.disabled = true;
+    currentDistances = await loadDistances();
+    if(!currentDistances){
+      uploadBtn.disabled = false;
+      return;
+    }
+    uploadBtn.disabled = false;
     distModal.show();
   });
 
@@ -175,13 +195,15 @@ if (typeof document !== 'undefined') {
 uploadBtn.addEventListener('click',async ()=>{
   uploadBtn.disabled=true;
   const prod={name:nameInput.value.trim(),location:`${pendingLocation.lat},${pendingLocation.lng}`};
-  const distances=await loadDistances();
-  if(!distances) { uploadBtn.disabled=false; return; }
-  const payload={producer:prod.name,distances,producerRecord:prod};
+  if(!currentDistances){ uploadBtn.disabled=false; return; }
+  const payload={producer:prod.name,distances:currentDistances,producerRecord:prod};
   try{
     await fetch('http://localhost:3101/api/distances',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
     distModal.hide();
-    alert('\u271A Producer added and distance matrix updated.');
+    showToast('\u271A Producer added \u2026');
+    nameInput.value='';
+    locInput.value='';
+    currentDistances=null;
   }catch(err){
     alert('Upload failed');
   }finally{
@@ -192,6 +214,9 @@ uploadBtn.addEventListener('click',async ()=>{
 distCancel.addEventListener('click',()=>{
   distModal.hide();
   addModal.show();
+  uploadBtn.disabled=true;
+  grid.innerHTML='';
+  currentDistances=null;
 });
 }
 
