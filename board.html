@@ -42,7 +42,7 @@
 
 <!-- Distance Preview Modal -->
 <div class="modal fade" id="distance-preview-modal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
-  <div class="modal-dialog modal-lg">
+<div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">Distance Matrix Preview</h5>
@@ -54,6 +54,15 @@
         <button type="button" class="btn btn-secondary" id="distance-cancel">Cancel</button>
         <button type="button" class="btn btn-primary" id="distance-upload" disabled>Upload</button>
       </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+  <div id="app-toast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body"></div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
     </div>
   </div>
 </div>
