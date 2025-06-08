@@ -6,6 +6,7 @@ listEl.id = 'producer-list';
 wrapper.insertBefore(listEl, headerRow.nextSibling);
 
 const addBtn = document.getElementById('new-btn');
+const orderBtn = document.getElementById('order-btn');
 const modal = document.getElementById('producer-modal');
 const form = document.getElementById('producer-form');
 const modalTitle = document.getElementById('producer-modal-title');
@@ -25,6 +26,7 @@ let producers = [];
 let processors = [];
 let pendingProducer = null;
 let currentDistances = null;
+let reorderMode = false;
 
 async function loadProducers(){
   const cached = localStorage.getItem('producers');
@@ -148,9 +150,14 @@ function renderList(){
   producers.forEach((p,i)=>{
     const row=document.createElement('div');
     row.className='producer-row';
+    let actions='';
+    if(reorderMode){
+      actions+=`<button class="up" data-index="${i}">↑</button><button class="down" data-index="${i}">↓</button>`;
+    }
+    actions+=`<button class="edit" data-index="${i}">✎</button><button class="delete" data-index="${i}">🗑</button>`;
     row.innerHTML=`<div class="name">${p.name}</div>
       <div class="location">${p.lat.toFixed(5)}, ${p.lon.toFixed(5)}</div>
-      <div class="actions"><button class="edit" data-index="${i}">✎</button><button class="delete" data-index="${i}">🗑</button></div>`;
+      <div class="actions">${actions}</div>`;
     listEl.appendChild(row);
   });
 }
@@ -161,6 +168,26 @@ listEl.addEventListener('click',e=>{
     openModal(Number(editBtn.dataset.index));
     return;
   }
+  const upBtn=e.target.closest('.up');
+  if(upBtn){
+    const idx=Number(upBtn.dataset.index);
+    if(idx>0){
+      [producers[idx-1],producers[idx]]=[producers[idx],producers[idx-1]];
+      persistProducers();
+      renderList();
+    }
+    return;
+  }
+  const downBtn=e.target.closest('.down');
+  if(downBtn){
+    const idx=Number(downBtn.dataset.index);
+    if(idx<producers.length-1){
+      [producers[idx],producers[idx+1]]=[producers[idx+1],producers[idx]];
+      persistProducers();
+      renderList();
+    }
+    return;
+  }
   const delBtn=e.target.closest('.delete');
   if(delBtn){
     openDeleteModal(Number(delBtn.dataset.index));
@@ -168,6 +195,10 @@ listEl.addEventListener('click',e=>{
 });
 
 addBtn.addEventListener('click',()=>openModal());
+orderBtn.addEventListener('click',()=>{
+  reorderMode=!reorderMode;
+  renderList();
+});
 
 function openModal(index){
   if(typeof index==='number'){
