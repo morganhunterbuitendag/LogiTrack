@@ -232,8 +232,10 @@ cancelDeleteBtn.addEventListener('click',()=>{
 
 confirmDeleteBtn.addEventListener('click',()=>{
   if(deleteIndex !== null){
+    const name = producers[deleteIndex].name;
     producers.splice(deleteIndex,1);
     persistProducers();
+    removeDistanceRecord(name);
     renderList();
   }
   deleteDialog.close();
@@ -299,6 +301,23 @@ async function saveDistanceRecord(obj){
     const a=document.createElement('a');
     a.href=URL.createObjectURL(blob);a.download='distances.json';
     document.body.appendChild(a);a.click();URL.revokeObjectURL(a.href);a.remove();
+  }
+}
+
+async function removeDistanceRecord(name){
+  try{
+    await fetch('/api/distances/'+encodeURIComponent(name),{method:'DELETE'});
+  }catch(err){
+    const res = await fetch('data/distances.json');
+    let arr=[];if(res.ok) arr=await res.json();
+    const idx=arr.findIndex(r=>r.producer===name);
+    if(idx!==-1){
+      arr.splice(idx,1);
+      const blob=new Blob([JSON.stringify(arr,null,2)],{type:'application/json'});
+      const a=document.createElement('a');
+      a.href=URL.createObjectURL(blob);a.download='distances.json';
+      document.body.appendChild(a);a.click();URL.revokeObjectURL(a.href);a.remove();
+    }
   }
 }
 
