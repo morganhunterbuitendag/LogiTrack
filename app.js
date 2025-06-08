@@ -7,6 +7,7 @@ function fmtTime(km,speed){if(!km)return"0 min";const m=Math.round(km/speed*60);
 
 /* ---------- data ---------- */
 let depots=[];
+let distanceMatrix={};
 
 const DEFAULT_FARMS=[
   {lat:-27.413064112082218,lon:26.39355653815821,name:"Sf Haasbroek"},
@@ -83,6 +84,24 @@ const tonInput=document.getElementById("tonnage");
 const gridBody=document.getElementById("depot-grid-body");
 const tariffDisp=document.getElementById("haulage-tariff-display");
 
+async function loadDistanceMatrix(){
+  distanceMatrix={};
+  try{
+    const res=await fetch('/api/distances',{cache:'no-store'});
+    if(!res.ok) throw new Error('bad');
+    const arr=await res.json();
+    arr.forEach(r=>{distanceMatrix[r.producer]=r.distances;});
+  }catch(err){
+    try{
+      const res=await fetch('data/distances.json',{cache:'no-store'});
+      if(res.ok){
+        const arr=await res.json();
+        arr.forEach(r=>{distanceMatrix[r.producer]=r.distances;});
+      }
+    }catch{}
+  }
+}
+
 /* ---------- map ---------- */
 const saMap=L.map("sa-map",{zoomControl:false}).setView([-28,25],6);
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:18,attribution:"© OSM"}).addTo(saMap);
@@ -111,7 +130,10 @@ function compute(){
   }
   const info=commodityPrices[comm];
   currentResults=depots.map(d=>{
-    const km=hav(farm.lat,farm.lon,d.lat,d.lon);
+    let km=null;
+    const map=distanceMatrix[farm.name];
+    if(map && map[d.name]!=null) km=+map[d.name];
+    if(km==null) km=hav(farm.lat,farm.lon,d.lat,d.lon);
     const haul=km*cfg.haulRate;
     const price=info.base+(info.diff[d.name]||0);
     return{...d,km,haul,landed:price+haul,price};
@@ -174,6 +196,7 @@ async function init(){
     loadList('producers','producers.json', DEFAULT_FARMS),
     loadList('processors','processors.json', DEFAULT_DEPOTS)
   ]);
+  await loadDistanceMatrix();
   populateSelectors();
   renderAllProducers();
   if(farms.length) farmSel.value=farms[0].name;
