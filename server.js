@@ -128,6 +128,28 @@ app.get('/api/distances', async (req,res)=>{
   }
 });
 
+app.delete('/api/distances/:producer', async (req,res)=>{
+  try{
+    const {producer} = req.params;
+    const records = await readArray('distances.json');
+    const idx = records.findIndex(r=>r.producer===producer);
+    if(idx!==-1){
+      records.splice(idx,1);
+      await writeArray('distances.json', records);
+    }
+    const prods = await readArray('producers.json');
+    const pidx = prods.findIndex(p=>p.name===producer);
+    if(pidx!==-1){
+      prods.splice(pidx,1);
+      await writeArray('producers.json', prods);
+    }
+    res.json({ok:true});
+  }catch(err){
+    console.error(err);
+    res.status(500).json({error:'server error'});
+  }
+});
+
 app.post('/api/pending-users', async (req, res) => {
   try{
     const {email, passwordHash} = req.body || {};
