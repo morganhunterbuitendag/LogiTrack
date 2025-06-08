@@ -3,6 +3,8 @@ import fs from 'fs/promises';
 import path from 'path';
 import cookieParser from 'cookie-parser';
 import jwt from 'jsonwebtoken';
+import nodemailer from 'nodemailer';
+import crypto from 'crypto';
 
 const PORT = process.env.PORT || 3101;
 const DATA_DIR = path.join(process.cwd(), 'data');
@@ -48,6 +50,29 @@ async function writeArray(file, arr){
   await ensureDir();
   const filePath = path.join(DATA_DIR, file);
   await fs.writeFile(filePath, JSON.stringify(arr, null, 2));
+}
+
+function generateToken(){
+  return crypto.randomBytes(32).toString('hex');
+}
+
+function sha256(str){
+  return crypto.createHash('sha256').update(str).digest('hex');
+}
+
+async function sendEmail(to, subject, text){
+  const {SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, SMTP_SECURE} = process.env;
+  if(!SMTP_HOST){
+    console.log(`Email to ${to}: ${text}`);
+    return;
+  }
+  const transport = nodemailer.createTransport({
+    host: SMTP_HOST,
+    port: Number(SMTP_PORT||0),
+    secure: SMTP_SECURE === 'true',
+    auth: {user: SMTP_USER, pass: SMTP_PASS}
+  });
+  await transport.sendMail({from: SMTP_USER, to, subject, text});
 }
 
 async function orsMatrix(origin, depots){
@@ -202,6 +227,53 @@ app.post('/api/users/:id/deactivate', async (req,res)=>{
     const user = users.find(u=>u.id===id);
     if(!user) return res.sendStatus(404);
     user.active = false;
+    await writeArray('users.json', users);
+    res.json({ok:true});
+  }catch(err){
+    console.error(err);
+    res.status(500).json({error:'server error'});
+  }
+});
+
+app.post('/api/auth/forgot', async (req,res)=>{
+  try{
+    const {email} = req.body || {};
+    if(typeof email !== 'string') return res.status(400).json({error:'invalid'});
+    const users = await readArray('users.json');
+    const user = users.find(u=>u.email===email);
+    if(user){
+      const token = generateToken();
+      const tokenHash = sha256(token);
+      const tokens = await readArray('reset-tokens.json');
+      tokens.push({tokenHash, email, expires: Date.now()+3600_000});
+      await writeArray('reset-tokens.json', tokens);
+      const link = `${req.protocol}://${req.get('host')}/reset.html?token=${token}`;
+      await sendEmail(email, 'Password reset', `Reset your password here: ${link}`);
+    }
+    res.json({ok:true});
+  }catch(err){
+    console.error(err);
+    res.status(500).json({error:'server error'});
+  }
+});
+
+app.post('/api/auth/reset', async (req,res)=>{
+  try{
+    const {token, passwordHash} = req.body || {};
+    if(typeof token !== 'string' || typeof passwordHash !== 'string'){
+      return res.status(400).json({error:'invalid'});
+    }
+    const tokens = await readArray('reset-tokens.json');
+    const tokenHash = sha256(token);
+    const idx = tokens.findIndex(t=>t.tokenHash===tokenHash && t.expires>Date.now());
+    if(idx===-1) return res.status(400).json({error:'invalid'});
+    const email = tokens[idx].email;
+    tokens.splice(idx,1);
+    await writeArray('reset-tokens.json', tokens);
+    const users = await readArray('users.json');
+    const user = users.find(u=>u.email===email);
+    if(!user) return res.status(400).json({error:'invalid'});
+    user.passwordHash = passwordHash;
     await writeArray('users.json', users);
     res.json({ok:true});
   }catch(err){
