@@ -69,3 +69,13 @@ dialog .actions{display:flex;justify-content:flex-end;gap:.75rem;margin-top:1.5r
 .toast{position:fixed;bottom:1rem;right:1rem;padding:0.5rem 1rem;background:#16a34a;color:#fff;border-radius:0.5rem;box-shadow:0 2px 6px rgba(0,0,0,.15);}
 .toast.hidden{display:none;}
 
+/* labels on route polylines */
+.line-label{
+  background:rgba(255,255,255,.8);
+  padding:2px 4px;
+  border-radius:4px;
+  border:1px solid #cbd5e0;
+  font-size:.75rem;
+  color:#2D3748;
+}
+
