@@ -65,7 +65,7 @@ async function loadPoints(url,fallback){
 const cfg={haulRate:2.5,speed:70};
 
 /* ---------- DOM ---------- */
-const farmSel=document.getElementById("client-farm");
+const farmSel=document.getElementById("producer-select");
 const commSel=document.getElementById("commodity");
 const tonInput=document.getElementById("tonnage");
 const gridBody=document.getElementById("depot-grid-body");
@@ -93,7 +93,7 @@ function compute(){
   const farm=farms.find(f=>f.name===farmSel.value);
   const comm=commSel.value;
   if(!farm||!comm){
-    gridBody.innerHTML="<tr><td colspan='1' style='text-align:center;padding:20px'>Select farm and commodity.</td></tr>";
+    gridBody.innerHTML="<tr><td colspan='2' style='text-align:center;padding:20px'>Select producer and commodity.</td></tr>";
     markerLayer.clearLayers();routeLayer.clearLayers();currentResults=[];
     return;
   }
@@ -112,7 +112,7 @@ function renderGrid(){
   gridBody.innerHTML="";
   currentResults.forEach((r,i)=>{
     let tr=gridBody.insertRow();
-    tr.innerHTML=`<td>${r.name}</td>`;
+    tr.innerHTML=`<td>${r.name}</td><td>${r.km.toFixed(0)} km</td>`;
     if(i===0) tr.classList.add("best-price");
     else if(i===1) tr.classList.add("runner-up-price");
   });
@@ -122,7 +122,7 @@ function renderProcessorList(){
   gridBody.innerHTML="";
   depots.forEach(d=>{
     let tr=gridBody.insertRow();
-    tr.innerHTML=`<td>${d.name}</td>`;
+    tr.innerHTML=`<td>${d.name}</td><td></td>`;
   });
 }
 
@@ -144,8 +144,14 @@ function renderMap(farm){
     L.circleMarker([d.lat,d.lon],{radius:7,weight:1,color:"#fff",fillColor:clr,fillOpacity:1})
       .addTo(markerLayer).bindTooltip(`${d.name}\nR${d.landed.toFixed(2)} / ${d.km.toFixed(0)} km`);
   });
-  let best=currentResults[0];L.polyline([[farm.lat,farm.lon],[best.lat,best.lon]],{color:"#2F855A",weight:3,dashArray:"6 3"}).addTo(routeLayer);
-  if(currentResults.length>1){let run=currentResults[1];L.polyline([[farm.lat,farm.lon],[run.lat,run.lon]],{color:"#D69E2E",weight:2,dashArray:"4 2",opacity:.8}).addTo(routeLayer);}
+  let best=currentResults[0];
+  const bestLine=L.polyline([[farm.lat,farm.lon],[best.lat,best.lon]],{color:"#2F855A",weight:3,dashArray:"6 3"}).addTo(routeLayer);
+  bestLine.bindTooltip(`${best.km.toFixed(0)} km`,{permanent:true,direction:'center',className:'line-label'});
+  if(currentResults.length>1){
+    let run=currentResults[1];
+    const runLine=L.polyline([[farm.lat,farm.lon],[run.lat,run.lon]],{color:"#D69E2E",weight:2,dashArray:"4 2",opacity:.8}).addTo(routeLayer);
+    runLine.bindTooltip(`${run.km.toFixed(0)} km`,{permanent:true,direction:'center',className:'line-label'});
+  }
   saMap.fitBounds(routeLayer.getBounds(),{padding:[30,30]});
 }
 /* ---------- events ---------- */
