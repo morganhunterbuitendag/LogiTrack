@@ -56,7 +56,10 @@ async function exportToExcel(){
   const ws = wb.addWorksheet('Distances');
 
   // extract headers
-  const headers = Array.from(table.querySelectorAll('thead th')).map(th => th.textContent || '');
+  const headers = Array.from(table.querySelectorAll('thead th')).map((th, idx) => {
+    const text = th.textContent || '';
+    return idx === 0 && text === '' ? 'Producer' : text;
+  });
   const rows = Array.from(table.querySelectorAll('tbody tr')).map(tr =>
     Array.from(tr.children).map(td => td.textContent)
   );
