@@ -95,10 +95,19 @@ app.post('/api/distances', async (req, res) => {
 
 app.get('/api/distances', async (req,res)=>{
   try{
-    const [producers, processors] = await Promise.all([
+    let [producers, processors] = await Promise.all([
       readArray('producers.json'),
       fs.readFile(path.join(process.cwd(),'processors.json'),'utf8').then(JSON.parse)
     ]);
+    if(producers.length === 0){
+      try{
+        const data = await fs.readFile(path.join(process.cwd(),'producers.json'),'utf8');
+        producers = JSON.parse(data);
+        if(Array.isArray(producers) && producers.length > 0){
+          await writeArray('producers.json', producers);
+        }
+      }catch{}
+    }
     let records = await readArray('distances.json');
     const existing = new Set(records.map(r=>r.producer));
     let changed = false;
