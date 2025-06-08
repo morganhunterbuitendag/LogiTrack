@@ -24,6 +24,7 @@ let deleteIndex = null;
 let producers = [];
 let processors = [];
 let pendingProducer = null;
+let currentDistances = null;
 
 async function loadProducers(){
   const cached = localStorage.getItem('producers');
@@ -126,15 +127,20 @@ async function loadDistances(){
   const depots=processors.map(p=>[p.lon,p.lat]);
   const vals=await getDistances(origin,depots);
   const inputs=distGrid.querySelectorAll('input');
+  const result={};
   vals.forEach((v,i)=>{
     const inp=inputs[i];
     if(v==null){
       inp.value='';
       inp.classList.add('border-red-500');
+      result[processors[i].name]=null;
     }else{
-      inp.value=Number(v).toFixed(2);
+      const n=Number(v).toFixed(2);
+      inp.value=n;
+      result[processors[i].name]=+n;
     }
   });
+  currentDistances = result;
 }
 
 function renderList(){
@@ -223,8 +229,8 @@ distCancelBtn.addEventListener('click',()=>{
   modal.showModal();
 });
 
-distUploadBtn.addEventListener('click',()=>{
-  if(!pendingProducer) return;
+distUploadBtn.addEventListener('click', async ()=>{
+  if(!pendingProducer || !currentDistances) return;
   if(form.dataset.index!==undefined){
     const idx=Number(form.dataset.index);
     producers[idx]=pendingProducer;
@@ -233,7 +239,14 @@ distUploadBtn.addEventListener('click',()=>{
   }
   persistProducers();
   renderList();
+  const payload={producer:pendingProducer.name,distances:currentDistances,producerRecord:pendingProducer};
+  try{
+    await fetch('/api/distances',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+  }catch(err){
+    console.error('Upload failed', err);
+  }
   pendingProducer=null;
+  currentDistances=null;
   distDialog.close();
 });
 
