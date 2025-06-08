@@ -44,9 +44,9 @@ const DEFAULT_DEPOTS=[
 ];
 
 const commodityPrices={
-  Maize:{base:3200,diff:{Delpa:0,"De Vale":-20,"Groot Saxony":50,"Help Mekaar":10,Kleinhoek:0,Mispah:-10,Sarbyn:30,Schoongesight:0,Sparta:40,Theronia:-5,"Vyf Susters":-5}},
-  Soybeans:{base:7500,diff:{Delpa:10,"De Vale":0,"Groot Saxony":-30,"Help Mekaar":20,Kleinhoek:0,Mispah:-20,Sarbyn:10,Schoongesight:0,Sparta:-15,Theronia:0,"Vyf Susters":0}},
-  Wheat:{base:4800,diff:{}}
+  Maize:{base:0,diff:{}},
+  Soybeans:{base:0,diff:{}},
+  Wheat:{base:0,diff:{}}
 };
 
 let farms=[];
@@ -82,7 +82,6 @@ const farmSel=document.getElementById("producer-select");
 const commSel=document.getElementById("commodity");
 const tonInput=document.getElementById("tonnage");
 const gridBody=document.getElementById("depot-grid-body");
-const tariffDisp=document.getElementById("haulage-tariff-display");
 
 async function loadDistanceMatrix(){
   distanceMatrix={};
@@ -115,7 +114,6 @@ function populateSelectors(){
   farms.forEach(f=>{let o=document.createElement("option");o.value=o.textContent=f.name;farmSel.appendChild(o)});
   commSel.innerHTML="";
   Object.keys(commodityPrices).forEach(c=>{let o=document.createElement("option");o.value=o.textContent=c;commSel.appendChild(o)});
-  tariffDisp.textContent=cfg.haulRate.toFixed(2);
 }
 
 /* ---------- core ---------- */
@@ -176,7 +174,7 @@ function renderMap(farm){
   currentResults.forEach((d,i)=>{
     const clr=i===0?"#2F855A":i===1?"#D69E2E":"#3182CE";
     L.circleMarker([d.lat,d.lon],{radius:7,weight:1,color:"#fff",fillColor:clr,fillOpacity:1})
-      .addTo(markerLayer).bindTooltip(`${d.name}\nR${d.landed.toFixed(2)} / ${d.km.toFixed(0)} km`);
+      .addTo(markerLayer).bindTooltip(`${d.name}\n${d.km.toFixed(0)} km`);
   });
   let best=currentResults[0];
   const bestLine=L.polyline([[farm.lat,farm.lon],[best.lat,best.lon]],{color:"#2F855A",weight:3,dashArray:"6 3"}).addTo(routeLayer);
