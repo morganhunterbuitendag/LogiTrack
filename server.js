@@ -50,6 +50,27 @@ async function writeArray(file, arr){
   await fs.writeFile(filePath, JSON.stringify(arr, null, 2));
 }
 
+async function orsMatrix(origin, depots){
+  const key = process.env.ORS_KEY;
+  if(!key) return depots.map(() => null);
+  const body = {
+    locations:[origin, ...depots],
+    sources:[0],
+    destinations:depots.map((_,i)=>i+1),
+    metrics:['distance'],
+    units:'km'
+  };
+  const res = await fetch('https://api.openrouteservice.org/v2/matrix/driving-car', {
+    method:'POST',
+    headers:{'Authorization':key,'Content-Type':'application/json'},
+    body:JSON.stringify(body)
+  });
+  if(!res.ok) throw new Error('ORS request failed');
+  const data = await res.json();
+  const vals = data.distances && data.distances[0];
+  return Array.isArray(vals) ? vals : depots.map(()=>null);
+}
+
 app.post('/api/distances', async (req, res) => {
   try{
     const {producer, distances, producerRecord} = req.body || {};
@@ -66,6 +87,40 @@ app.post('/api/distances', async (req, res) => {
       await fs.writeFile(prodFile, JSON.stringify(producers, null, 2));
     }
     res.sendStatus(200);
+  }catch(err){
+    console.error(err);
+    res.status(500).json({error:'server error'});
+  }
+});
+
+app.get('/api/distances', async (req,res)=>{
+  try{
+    const [producers, processors] = await Promise.all([
+      readArray('producers.json'),
+      fs.readFile(path.join(process.cwd(),'processors.json'),'utf8').then(JSON.parse)
+    ]);
+    let records = await readArray('distances.json');
+    const existing = new Set(records.map(r=>r.producer));
+    let changed = false;
+    for(const prod of producers){
+      if(existing.has(prod.name)) continue;
+      const origin = [prod.lon, prod.lat];
+      const depots = processors.map(p=>[p.lon,p.lat]);
+      try{
+        const vals = await orsMatrix(origin, depots);
+        const obj = {};
+        vals.forEach((v,i)=>{obj[processors[i].name]=v==null?null:+Number(v).toFixed(2);});
+        records.push({producer:prod.name, distances:obj});
+        changed = true;
+      }catch{
+        const obj = {};
+        processors.forEach(p=>{obj[p.name]=null;});
+        records.push({producer:prod.name, distances:obj});
+        changed = true;
+      }
+    }
+    if(changed) await writeArray('distances.json', records);
+    res.json(records);
   }catch(err){
     console.error(err);
     res.status(500).json({error:'server error'});
