@@ -1,1 +1,362 @@
-[]
+[
+  {
+    "producer": "Sf Haasbroek",
+    "distances": {
+      "SPAR": 220.67,
+      "SAX": 223.41,
+      "SCH": 154.73,
+      "THR": 107.76,
+      "KLE": 166.72,
+      "SAR": 111.78,
+      "MIS": 102.59,
+      "HLP": 74.15,
+      "VYF": 20.53,
+      "Itau": 259.52,
+      "Gritsly": 95.06,
+      "Premier": 107.81,
+      "Aliwal": 466.34,
+      "Ficksburg": 273.42,
+      "Klerksdorp": 86.91
+    }
+  },
+  {
+    "producer": "Cornelia",
+    "distances": {
+      "SPAR": 200.8,
+      "SAX": 189.26,
+      "SCH": 93.06,
+      "THR": 85.25,
+      "KLE": 90.51,
+      "SAR": 90.85,
+      "MIS": 43.03,
+      "HLP": 56.83,
+      "VYF": 32.58,
+      "Itau": 183.31,
+      "Gritsly": 77.29,
+      "Premier": 127.08,
+      "Aliwal": 390.13,
+      "Ficksburg": 253.55,
+      "Klerksdorp": 109.18
+    }
+  },
+  {
+    "producer": "JN Jacobsz",
+    "distances": {
+      "SPAR": 183.15,
+      "SAX": 171.62,
+      "SCH": 97.15,
+      "THR": 89.34,
+      "KLE": 94.6,
+      "SAR": 86.86,
+      "MIS": 47.11,
+      "HLP": 49.23,
+      "VYF": 24.98,
+      "Itau": 187.4,
+      "Gritsly": 81.38,
+      "Premier": 108.79,
+      "Aliwal": 394.22,
+      "Ficksburg": 235.9,
+      "Klerksdorp": 101.58
+    }
+  },
+  {
+    "producer": "HP Ferreira",
+    "distances": {
+      "SPAR": 206.05,
+      "SAX": 145.7,
+      "SCH": 42.91,
+      "THR": 55.61,
+      "KLE": 40.36,
+      "SAR": 97.49,
+      "MIS": 49.66,
+      "HLP": 63.49,
+      "VYF": 107.72,
+      "Itau": 133.16,
+      "Gritsly": 82.55,
+      "Premier": 132.33,
+      "Aliwal": 339.98,
+      "Ficksburg": 258.8,
+      "Klerksdorp": 160.23
+    }
+  },
+  {
+    "producer": "Teo Ferreira",
+    "distances": {
+      "SPAR": 165.21,
+      "SAX": 123.53,
+      "SCH": 41.39,
+      "THR": 54.08,
+      "KLE": 4.88,
+      "SAR": 63.14,
+      "MIS": 75.39,
+      "HLP": 80.67,
+      "VYF": 133.46,
+      "Itau": 107.89,
+      "Gritsly": 80.21,
+      "Premier": 148.11,
+      "Aliwal": 314.71,
+      "Ficksburg": 216.77,
+      "Klerksdorp": 202.6
+    }
+  },
+  {
+    "producer": "Izak Cronje",
+    "distances": {
+      "SPAR": 159.47,
+      "SAX": 117.78,
+      "SCH": 19.69,
+      "THR": 37.37,
+      "KLE": 36.67,
+      "SAR": 94.93,
+      "MIS": 73.22,
+      "HLP": 87.05,
+      "VYF": 147.6,
+      "Itau": 129.47,
+      "Gritsly": 63.49,
+      "Premier": 131.4,
+      "Aliwal": 336.29,
+      "Ficksburg": 211.03,
+      "Klerksdorp": 185.88
+    }
+  },
+  {
+    "producer": "Gerhard Cronje",
+    "distances": {
+      "SPAR": 139.97,
+      "SAX": 98.28,
+      "SCH": 11.79,
+      "THR": 32.58,
+      "KLE": 42.17,
+      "SAR": 100.43,
+      "MIS": 78.73,
+      "HLP": 92.56,
+      "VYF": 142.81,
+      "Itau": 134.97,
+      "Gritsly": 58.7,
+      "Premier": 126.61,
+      "Aliwal": 341.8,
+      "Ficksburg": 191.53,
+      "Klerksdorp": 181.1
+    }
+  },
+  {
+    "producer": "Matomundi",
+    "distances": {
+      "SPAR": 139.88,
+      "SAX": 98.2,
+      "SCH": 54.55,
+      "THR": 27.63,
+      "KLE": 66.54,
+      "SAR": 124.78,
+      "MIS": 76.96,
+      "HLP": 90.78,
+      "VYF": 112.17,
+      "Itau": 159.34,
+      "Gritsly": 28.07,
+      "Premier": 95.97,
+      "Aliwal": 366.16,
+      "Ficksburg": 191.44,
+      "Klerksdorp": 150.46
+    }
+  },
+  {
+    "producer": "Maas Bdry",
+    "distances": {
+      "SPAR": 183.71,
+      "SAX": 172.17,
+      "SCH": 55.64,
+      "THR": 35,
+      "KLE": 53.09,
+      "SAR": 75.14,
+      "MIS": 27.31,
+      "HLP": 41.14,
+      "VYF": 85.38,
+      "Itau": 145.89,
+      "Gritsly": 60.2,
+      "Premier": 109.99,
+      "Aliwal": 352.71,
+      "Ficksburg": 236.46,
+      "Klerksdorp": 137.88
+    }
+  },
+  {
+    "producer": "Betmar",
+    "distances": {
+      "SPAR": 202.78,
+      "SAX": 161.1,
+      "SCH": 82.63,
+      "THR": 95.33,
+      "KLE": 41.69,
+      "SAR": 35.42,
+      "MIS": 61.82,
+      "HLP": 61.43,
+      "VYF": 108.1,
+      "Itau": 143.36,
+      "Gritsly": 121.45,
+      "Premier": 189.35,
+      "Aliwal": 350.18,
+      "Ficksburg": 254.34,
+      "Klerksdorp": 213.45
+    }
+  },
+  {
+    "producer": "Borlinghaus",
+    "distances": {
+      "SPAR": 195.17,
+      "SAX": 183.64,
+      "SCH": 87.44,
+      "THR": 79.63,
+      "KLE": 84.89,
+      "SAR": 85.23,
+      "MIS": 37.4,
+      "HLP": 43.04,
+      "VYF": 43.12,
+      "Itau": 177.69,
+      "Gritsly": 71.67,
+      "Premier": 121.45,
+      "Aliwal": 384.51,
+      "Ficksburg": 247.92,
+      "Klerksdorp": 119.72
+    }
+  },
+  {
+    "producer": "WD Botha",
+    "distances": {
+      "SPAR": 109.06,
+      "SAX": 67.38,
+      "SCH": 92.4,
+      "THR": 69.33,
+      "KLE": 128.29,
+      "SAR": 158.13,
+      "MIS": 110.3,
+      "HLP": 124.13,
+      "VYF": 145.51,
+      "Itau": 156.67,
+      "Gritsly": 39.36,
+      "Premier": 81.87,
+      "Aliwal": 363.49,
+      "Ficksburg": 160.62,
+      "Klerksdorp": 183.8
+    }
+  },
+  {
+    "producer": "Mons Bdy",
+    "distances": {
+      "SPAR": 183.38,
+      "SAX": 141.7,
+      "SCH": 40.99,
+      "THR": 53.69,
+      "KLE": 13.72,
+      "SAR": 60.39,
+      "MIS": 59.32,
+      "HLP": 77.92,
+      "VYF": 117.38,
+      "Itau": 126.06,
+      "Gritsly": 79.81,
+      "Premier": 141.99,
+      "Aliwal": 332.88,
+      "Ficksburg": 234.94,
+      "Klerksdorp": 169.89
+    }
+  },
+  {
+    "producer": "Anton Muller",
+    "distances": {
+      "SPAR": 259.41,
+      "SAX": 247.88,
+      "SCH": 125.53,
+      "THR": 143.86,
+      "KLE": 79.7,
+      "SAR": 21,
+      "MIS": 68.92,
+      "HLP": 68.52,
+      "VYF": 115.19,
+      "Itau": 192.04,
+      "Gritsly": 135.91,
+      "Premier": 185.69,
+      "Aliwal": 398.86,
+      "Ficksburg": 312.16,
+      "Klerksdorp": 171.79
+    }
+  },
+  {
+    "producer": "Marits Nel",
+    "distances": {
+      "SPAR": 190.76,
+      "SAX": 179.23,
+      "SCH": 83.02,
+      "THR": 75.21,
+      "KLE": 80.47,
+      "SAR": 80.82,
+      "MIS": 32.99,
+      "HLP": 59.15,
+      "VYF": 38.77,
+      "Itau": 173.27,
+      "Gritsly": 67.26,
+      "Premier": 117.04,
+      "Aliwal": 380.1,
+      "Ficksburg": 243.51,
+      "Klerksdorp": 110.37
+    }
+  },
+  {
+    "producer": "Dawie Naude",
+    "distances": {
+      "SPAR": 193.07,
+      "SAX": 151.38,
+      "SCH": 69.24,
+      "THR": 81.94,
+      "KLE": 23.41,
+      "SAR": 38.2,
+      "MIS": 56.12,
+      "HLP": 55.73,
+      "VYF": 102.39,
+      "Itau": 135.75,
+      "Gritsly": 108.06,
+      "Premier": 172.89,
+      "Aliwal": 342.57,
+      "Ficksburg": 244.62,
+      "Klerksdorp": 207.74
+    }
+  },
+  {
+    "producer": "Prop van Zyl",
+    "distances": {
+      "SPAR": 183.06,
+      "SAX": 171.52,
+      "SCH": 61.81,
+      "THR": 21.8,
+      "KLE": 66.92,
+      "SAR": 74.49,
+      "MIS": 26.67,
+      "HLP": 40.49,
+      "VYF": 84.73,
+      "Itau": 159.72,
+      "Gritsly": 59.56,
+      "Premier": 109.34,
+      "Aliwal": 366.54,
+      "Ficksburg": 235.81,
+      "Klerksdorp": 137.24
+    }
+  },
+  {
+    "producer": "Onverwag Boerdery",
+    "distances": {
+      "SPAR": 178.84,
+      "SAX": 137.16,
+      "SCH": 55.02,
+      "THR": 67.71,
+      "KLE": 10.87,
+      "SAR": 63.15,
+      "MIS": 89.02,
+      "HLP": 80.68,
+      "VYF": 127.35,
+      "Itau": 121.52,
+      "Gritsly": 93.83,
+      "Premier": 161.74,
+      "Aliwal": 328.34,
+      "Ficksburg": 230.4,
+      "Klerksdorp": 232.69
+    }
+  }
+]
