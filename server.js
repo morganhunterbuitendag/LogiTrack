@@ -95,40 +95,7 @@ app.post('/api/distances', async (req, res) => {
 
 app.get('/api/distances', async (req,res)=>{
   try{
-    let [producers, processors] = await Promise.all([
-      readArray('producers.json'),
-      fs.readFile(path.join(process.cwd(),'processors.json'),'utf8').then(JSON.parse)
-    ]);
-    if(producers.length === 0){
-      try{
-        const data = await fs.readFile(path.join(process.cwd(),'producers.json'),'utf8');
-        producers = JSON.parse(data);
-        if(Array.isArray(producers) && producers.length > 0){
-          await writeArray('producers.json', producers);
-        }
-      }catch{}
-    }
-    let records = await readArray('distances.json');
-    const existing = new Set(records.map(r=>r.producer));
-    let changed = false;
-    for(const prod of producers){
-      if(existing.has(prod.name)) continue;
-      const origin = [prod.lon, prod.lat];
-      const depots = processors.map(p=>[p.lon,p.lat]);
-      try{
-        const vals = await orsMatrix(origin, depots);
-        const obj = {};
-        vals.forEach((v,i)=>{obj[processors[i].name]=v==null?null:+Number(v).toFixed(2);});
-        records.push({producer:prod.name, distances:obj});
-        changed = true;
-      }catch{
-        const obj = {};
-        processors.forEach(p=>{obj[p.name]=null;});
-        records.push({producer:prod.name, distances:obj});
-        changed = true;
-      }
-    }
-    if(changed) await writeArray('distances.json', records);
+    const records = await readArray('distances.json');
     res.json(records);
   }catch(err){
     console.error(err);
