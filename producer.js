@@ -17,7 +17,6 @@ const deleteDialog = document.getElementById('delete-dialog');
 const confirmDeleteBtn = deleteDialog.querySelector('.confirm');
 const cancelDeleteBtn = deleteDialog.querySelector('.cancel');
 const distDialog = document.getElementById('distance-dialog');
-const distName = document.getElementById('distance-producer');
 const distGrid = document.getElementById('distance-grid');
 const distUploadBtn = distDialog.querySelector('.upload');
 const distCancelBtn = distDialog.querySelector('.cancel');
@@ -205,7 +204,6 @@ form.addEventListener('submit', async e => {
   const lon = parseFloat(parts[1]);
   if (!nameInput.value.trim() || isNaN(lat) || isNaN(lon)) return;
   pendingProducer = {name: nameInput.value.trim(), lat, lon};
-  distName.textContent = pendingProducer.name;
   buildGrid();
   modal.close();
   distDialog.showModal();
