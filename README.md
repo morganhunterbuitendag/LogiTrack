@@ -11,6 +11,9 @@ npm install
 npm start
 ```
 
+If `npm start` fails with an error like `Cannot find package 'nodemailer'`, make sure
+the dependencies are installed by running `npm install` first.
+
 This serves the application and API on `http://localhost:3101/`. Open that URL in your browser.
 
 Run tests with:
