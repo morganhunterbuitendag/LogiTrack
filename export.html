@@ -66,16 +66,18 @@
     </div>
 
     <div class="content-area">
-      <div class="main-content-wrapper">
-        <h1 class="text-xl font-semibold">Export</h1>
-        <p>This section will allow exporting data to Excel.</p>
+      <div class="main-content-wrapper p-4">
+        <h1 class="text-xl font-semibold mb-4">Export Distances</h1>
+        <div id="distance-table" class="overflow-auto mb-4"></div>
+        <button id="export-btn" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">Export to Excel</button>
       </div>
     </div>
   </div>
   <footer class="footer-note">&nbsp;</footer>
 </div>
-
 <script type="module" src="hideAdmin.js"></script>
 <script src="adminTab.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/exceljs/dist/exceljs.min.js"></script>
+<script type="module" src="export.js"></script>
 </body>
 </html>
