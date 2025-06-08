@@ -50,10 +50,21 @@ function buildTable(producers, processors, matrix){
 }
 
 (async () => {
+  async function loadList(key, url, fallback){
+    let arr;
+    const cached = localStorage.getItem(key);
+    if(cached){
+      try{ arr = JSON.parse(cached); }catch{}
+    }
+    if(!Array.isArray(arr) || arr.length === 0){
+      arr = await fetchJSON(url, fallback);
+    }
+    return arr;
+  }
   try{
     const [producers, processors, records] = await Promise.all([
-      fetchJSON('producers.json'),
-      fetchJSON('processors.json'),
+      loadList('producers','producers.json'),
+      loadList('processors','processors.json'),
       fetchJSON('/api/distances', 'data/distances.json')
     ]);
     const matrix = {};
