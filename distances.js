@@ -1,7 +1,15 @@
-async function fetchJSON(url){
-  const res = await fetch(url, {cache:'no-store'});
-  if(!res.ok) throw new Error('Failed to load '+url);
-  return res.json();
+async function fetchJSON(url, fallback){
+  try{
+    const res = await fetch(url, {cache:'no-store'});
+    if(!res.ok) throw new Error('Failed to load '+url);
+    return await res.json();
+  }catch(err){
+    if(fallback){
+      const res = await fetch(fallback, {cache:'no-store'});
+      if(res.ok) return res.json();
+    }
+    throw err;
+  }
 }
 
 function buildTable(producers, processors, matrix){
@@ -46,7 +54,7 @@ function buildTable(producers, processors, matrix){
     const [producers, processors, records] = await Promise.all([
       fetchJSON('producers.json'),
       fetchJSON('processors.json'),
-      fetchJSON('/api/distances')
+      fetchJSON('/api/distances', 'data/distances.json')
     ]);
     const matrix = {};
     records.forEach(r => { matrix[r.producer] = r.distances; });
