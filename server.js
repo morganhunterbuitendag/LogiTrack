@@ -333,6 +333,39 @@ app.get('/api/auth/check', (req,res)=>{
   }
 });
 
+app.post('/api/auth/logout', (req,res)=>{
+  res.clearCookie('auth');
+  res.json({ok:true});
+});
+
+app.post('/api/auth/change-password', async (req,res)=>{
+  const token = req.cookies.auth;
+  if(!token) return res.status(401).end();
+  let payload;
+  try{
+    payload = jwt.verify(token, JWT_SECRET);
+  }catch{
+    return res.status(401).end();
+  }
+  const {oldPasswordHash,newPasswordHash} = req.body || {};
+  if(typeof oldPasswordHash !== 'string' || typeof newPasswordHash !== 'string'){
+    return res.status(400).json({error:'invalid'});
+  }
+  try{
+    const users = await readArray('users.json');
+    const user = users.find(u=>u.email===payload.email);
+    if(!user || user.passwordHash !== oldPasswordHash){
+      return res.status(400).json({error:'invalid'});
+    }
+    user.passwordHash = newPasswordHash;
+    await writeArray('users.json', users);
+    res.json({ok:true});
+  }catch(err){
+    console.error(err);
+    res.status(500).json({error:'server error'});
+  }
+});
+
 app.use(express.static(process.cwd(), { index: 'login.html' }));
 
 app.listen(PORT, () => {

@@ -79,3 +79,7 @@ dialog .actions{display:flex;justify-content:flex-end;gap:.75rem;margin-top:1.5r
   color:#2D3748;
 }
 
+
+.user-info{display:flex;align-items:center;gap:.5rem;font-weight:500;color:#2D3748;}
+.user-circle{width:32px;height:32px;border-radius:50%;background:#2C7A7B;color:#fff;display:flex;align-items:center;justify-content:center;font-size:.9rem;}
+
