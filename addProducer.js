@@ -207,7 +207,7 @@ uploadBtn.addEventListener('click',async ()=>{
   if(!currentDistances){ uploadBtn.disabled=false; return; }
   const payload={producer:prod.name,distances:currentDistances,producerRecord:prod};
   try{
-    await fetch('/api/distances',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    await saveDistanceRecord(payload);
     distModalEl.close();
     showToast('\u271A Producer added \u2026');
     nameInput.value='';
@@ -250,6 +250,14 @@ export async function appendJSON(file,obj){
       const a=document.createElement('a');
       a.href=URL.createObjectURL(blob);a.download=file;document.body.appendChild(a);a.click();URL.revokeObjectURL(a.href);a.remove();
     }
+  }
+}
+
+export async function saveDistanceRecord(obj){
+  try{
+    await fetch('/api/distances',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(obj)});
+  }catch(err){
+    await appendJSON('data/distances.json',obj);
   }
 }
 

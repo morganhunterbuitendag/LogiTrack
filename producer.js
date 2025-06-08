@@ -241,7 +241,7 @@ distUploadBtn.addEventListener('click', async ()=>{
   renderList();
   const payload={producer:pendingProducer.name,distances:currentDistances,producerRecord:pendingProducer};
   try{
-    await fetch('/api/distances',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    await saveDistanceRecord(payload);
   }catch(err){
     console.error('Upload failed', err);
   }
@@ -255,6 +255,20 @@ function persistProducers(){
   const blob=new Blob([JSON.stringify(producers,null,2)],{type:'application/json'});
   const a=Object.assign(document.createElement('a'),{href:URL.createObjectURL(blob),download:'producers.json'});
   document.body.appendChild(a);a.click();URL.revokeObjectURL(a.href);a.remove();
+}
+
+async function saveDistanceRecord(obj){
+  try{
+    await fetch('/api/distances',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(obj)});
+  }catch(err){
+    const res = await fetch('data/distances.json');
+    let arr=[];if(res.ok) arr=await res.json();
+    arr.push(obj);
+    const blob=new Blob([JSON.stringify(arr,null,2)],{type:'application/json'});
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(blob);a.download='distances.json';
+    document.body.appendChild(a);a.click();URL.revokeObjectURL(a.href);a.remove();
+  }
 }
 
 (async function init(){
