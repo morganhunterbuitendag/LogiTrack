@@ -57,10 +57,16 @@ async function loadProducers(){
 }
 
 async function loadProcessors(){
-  try{
-    const res = await fetch('processors.json',{cache:'no-store'});
-    if(res.ok) processors = await res.json();
-  }catch{}
+  const cached = localStorage.getItem('processors');
+  if(cached){
+    try{ processors = JSON.parse(cached); }catch{ processors = []; }
+  }
+  if(!Array.isArray(processors) || processors.length === 0){
+    try{
+      const res = await fetch('processors.json',{cache:'no-store'});
+      if(res.ok) processors = await res.json();
+    }catch{}
+  }
   if(!Array.isArray(processors)) processors = [];
 }
 
@@ -197,18 +203,19 @@ confirmDeleteBtn.addEventListener('click',()=>{
   deleteIndex = null;
 });
 
-form.addEventListener('submit', async e => {
-  e.preventDefault();
-  const parts = locInput.value.split(/[ ,\s]+/);
-  const lat = parseFloat(parts[0]);
-  const lon = parseFloat(parts[1]);
-  if (!nameInput.value.trim() || isNaN(lat) || isNaN(lon)) return;
-  pendingProducer = {name: nameInput.value.trim(), lat, lon};
-  buildGrid();
-  modal.close();
-  distDialog.showModal();
-  await loadDistances();
-});
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    const parts = locInput.value.split(/[ ,\s]+/);
+    const lat = parseFloat(parts[0]);
+    const lon = parseFloat(parts[1]);
+    if (!nameInput.value.trim() || isNaN(lat) || isNaN(lon)) return;
+    pendingProducer = {name: nameInput.value.trim(), lat, lon};
+    await loadProcessors();
+    buildGrid();
+    modal.close();
+    distDialog.showModal();
+    await loadDistances();
+  });
 
 distCancelBtn.addEventListener('click',()=>{
   distDialog.close();
