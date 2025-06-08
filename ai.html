@@ -3,16 +3,40 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Settings</title>
+  <title>LogiTrack AI</title>
   <link rel="stylesheet" href="styles.css">
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    #ai-canvas-container { position: relative; height: 500px; }
+    #info {
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 10px 20px;
+      background-color: rgba(200, 200, 200, 0.5);
+      border-radius: 8px;
+      font-size: 16px;
+      text-align: center;
+      z-index: 100;
+    }
+    #ai-input {
+      border-radius: 9999px;
+      border: 1px solid #cbd5e0;
+      padding: 0.5rem 1rem;
+      width: 100%;
+    }
+    #ask-btn {
+      border-radius: 9999px;
+      padding: 0.5rem 1.5rem;
+    }
+  </style>
 </head>
 <body>
 <div class="workspace">
   <header class="bg-slate-300 shadow-sm border-b border-slate-400 px-8 py-4 flex justify-between items-center">
     <h2 class="text-2xl font-bold text-slate-800">LogiTrack</h2>
-    <div id="user-info"></div>
   </header>
   <div class="dashboard">
     <nav class="sidebar bg-slate-200 shadow-xl border-r border-slate-300">
@@ -41,23 +65,23 @@
               <span class="font-medium">Distances</span>
             </a>
           </li>
-        <li>
-          <a href="export.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-100 transition-all duration-200 hover:text-slate-800">
-            <span class="material-symbols-outlined text-lg">file_download</span>
-            <span class="font-medium">Export</span>
-          </a>
-        </li>
-        <li>
-          <a href="ai.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-100 transition-all duration-200 hover:text-slate-800">
-            <span class="material-symbols-outlined text-lg">smart_toy</span>
-            <span class="font-medium">LogiTrack AI</span>
-          </a>
-        </li>
-        <li>
-          <a href="settings.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-100 transition-all duration-200 hover:text-slate-800 bg-blue-50 text-blue-700 border border-blue-200">
-            <span class="material-symbols-outlined text-lg">settings</span>
-            <span class="font-medium">Settings</span>
-          </a>
+          <li>
+            <a href="export.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-100 transition-all duration-200 hover:text-slate-800">
+              <span class="material-symbols-outlined text-lg">file_download</span>
+              <span class="font-medium">Export</span>
+            </a>
+          </li>
+          <li>
+            <a href="ai.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-100 transition-all duration-200 hover:text-slate-800 bg-blue-50 text-blue-700 border border-blue-200">
+              <span class="material-symbols-outlined text-lg">smart_toy</span>
+              <span class="font-medium">LogiTrack AI</span>
+            </a>
+          </li>
+          <li>
+            <a href="settings.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-100 transition-all duration-200 hover:text-slate-800">
+              <span class="material-symbols-outlined text-lg">settings</span>
+              <span class="font-medium">Settings</span>
+            </a>
           </li>
           <li class="admin-link">
             <a href="board.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-100 transition-all duration-200 hover:text-slate-800">
@@ -72,27 +96,23 @@
     </div>
     <div class="content-area">
       <div class="main-content-wrapper p-4">
-        <h1 class="text-xl font-semibold mb-4">Settings</h1>
-        <div id="profile-email" class="mb-4"></div>
-        <form id="password-form" class="mb-4">
-          <label class="block font-medium mb-1">Current Password
-            <input type="password" id="current-password" class="border border-slate-300 rounded-lg px-3 py-2 w-full">
-          </label>
-          <label class="block font-medium mb-1 mt-3">New Password
-            <input type="password" id="new-password" class="border border-slate-300 rounded-lg px-3 py-2 w-full">
-          </label>
-          <button type="submit" class="mt-3 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">Change Password</button>
-          <div id="password-msg" class="text-sm mt-2"></div>
-        </form>
-        <button id="logout-btn" class="bg-slate-600 hover:bg-slate-700 text-white px-4 py-2 rounded">Log out</button>
+        <div id="ai-canvas-container" class="rounded border border-slate-200 mb-6">
+          <div id="info">Initializing Particle Sphere...</div>
+        </div>
+        <div class="flex gap-2 items-center">
+          <input id="ai-input" type="text" placeholder="Ask a question..." />
+          <button id="ask-btn" class="bg-blue-600 hover:bg-blue-700 text-white">Ask</button>
+        </div>
       </div>
     </div>
   </div>
   <footer class="footer-note">&nbsp;</footer>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script src="ai.js"></script>
 <script type="module" src="hideAdmin.js"></script>
 <script type="module" src="userInfo.js"></script>
-<script type="module" src="settings.js"></script>
 <script src="adminTab.js"></script>
 </body>
 </html>
