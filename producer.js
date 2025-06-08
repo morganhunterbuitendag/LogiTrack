@@ -100,7 +100,6 @@ function buildGrid(){
   processors.forEach(()=>{
     const td=document.createElement('td');
     const inp=document.createElement('input');
-    inp.readOnly=true;
     inp.className='border rounded px-2 py-1 w-full text-center';
     inp.value='…';
     td.appendChild(inp);
@@ -143,6 +142,16 @@ async function loadDistances(){
     }
   });
   currentDistances = result;
+}
+
+function readDistances(){
+  const inputs=distGrid.querySelectorAll('input');
+  const result={};
+  inputs.forEach((inp,i)=>{
+    const val=parseFloat(inp.value);
+    result[processors[i].name]=isFinite(val)?+val:null;
+  });
+  return result;
 }
 
 function renderList(){
@@ -263,7 +272,8 @@ distCancelBtn.addEventListener('click',()=>{
 });
 
 distUploadBtn.addEventListener('click', async ()=>{
-  if(!pendingProducer || !currentDistances) return;
+  if(!pendingProducer) return;
+  currentDistances = readDistances();
   if(form.dataset.index!==undefined){
     const idx=Number(form.dataset.index);
     producers[idx]=pendingProducer;
