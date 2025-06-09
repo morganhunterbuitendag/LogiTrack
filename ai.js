@@ -98,7 +98,8 @@ function animate() {
     if (buildProgress >= 1) {
       buildProgress = 1;
       sphereBuilt = true;
-      document.getElementById('info').textContent = 'Sphere Complete! Thinking...';
+      const infoEl = document.getElementById('info');
+      if (infoEl) infoEl.style.display = 'none';
     }
     for (let i = 0; i < particleCount; i++) {
       const idx = i * 3;
@@ -134,6 +135,21 @@ window.addEventListener('load', () => {
   try {
     init();
     animate();
+    const askBtn = document.getElementById('ask-btn');
+    const msgEl = document.getElementById('ai-message');
+    if (askBtn) {
+      askBtn.addEventListener('click', () => {
+        if (msgEl) {
+          msgEl.textContent = '⚠️ AI link disconnected. Please try again later.';
+          msgEl.style.display = 'block';
+          msgEl.style.opacity = '1';
+          setTimeout(() => { msgEl.style.opacity = '0'; }, 4000);
+          setTimeout(() => { msgEl.style.display = 'none'; }, 4500);
+        } else {
+          alert('AI link disconnected. Please try again later.');
+        }
+      });
+    }
   } catch (error) {
     console.error('Error initializing WebGL:', error);
     const info = document.getElementById('info');
