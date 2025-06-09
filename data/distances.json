@@ -358,5 +358,185 @@
       "Ficksburg": 230.4,
       "Klerksdorp": 232.69
     }
+  },
+  {
+    "producer": "SPAR",
+    "distances": {
+      "SPAR": 0,
+      "SAX": 72.62,
+      "SCH": 135,
+      "THR": 160.44,
+      "KLE": 170.07,
+      "SAR": 238.42,
+      "MIS": 190.59,
+      "HLP": 204.42,
+      "VYF": 234.55,
+      "Itau": 178.24,
+      "Gritsly": 135.4,
+      "Premier": 137.25,
+      "Aliwal": 385.06,
+      "Ficksburg": 82.96,
+      "Klerksdorp": 249.3
+    }
+  },
+  {
+    "producer": "SAX",
+    "distances": {
+      "SPAR": 72.64,
+      "SAX": 0,
+      "SCH": 93.33,
+      "THR": 121.93,
+      "KLE": 128.4,
+      "SAR": 226.67,
+      "MIS": 178.84,
+      "HLP": 192.67,
+      "VYF": 222.8,
+      "Itau": 136.57,
+      "Gritsly": 107,
+      "Premier": 125.49,
+      "Aliwal": 343.39,
+      "Ficksburg": 126,
+      "Klerksdorp": 237.54
+    }
+  },
+  {
+    "producer": "SCH",
+    "distances": {
+      "SPAR": 135.02,
+      "SAX": 93.33,
+      "SCH": 0,
+      "THR": 46.97,
+      "KLE": 46.27,
+      "SAR": 104.53,
+      "MIS": 82.82,
+      "HLP": 96.65,
+      "VYF": 157.2,
+      "Itau": 139.07,
+      "Gritsly": 73.09,
+      "Premier": 141,
+      "Aliwal": 345.89,
+      "Ficksburg": 186.57,
+      "Klerksdorp": 195.48
+    }
+  },
+  {
+    "producer": "THR",
+    "distances": {
+      "SPAR": 160.44,
+      "SAX": 121.97,
+      "SCH": 46.97,
+      "THR": 0,
+      "KLE": 58.97,
+      "SAR": 122.84,
+      "MIS": 75.01,
+      "HLP": 88.84,
+      "VYF": 110.23,
+      "Itau": 151.77,
+      "Gritsly": 26.12,
+      "Premier": 94.03,
+      "Aliwal": 358.59,
+      "Ficksburg": 213.19,
+      "Klerksdorp": 148.51
+    }
+  },
+  {
+    "producer": "KLE",
+    "distances": {
+      "SPAR": 170.09,
+      "SAX": 128.41,
+      "SCH": 46.27,
+      "THR": 58.97,
+      "KLE": 0,
+      "SAR": 58.7,
+      "MIS": 80.27,
+      "HLP": 76.23,
+      "VYF": 122.89,
+      "Itau": 112.77,
+      "Gritsly": 85.09,
+      "Premier": 152.99,
+      "Aliwal": 319.59,
+      "Ficksburg": 221.65,
+      "Klerksdorp": 228.24
+    }
+  },
+  {
+    "producer": "SAR",
+    "distances": {
+      "SPAR": 238.41,
+      "SAX": 226.87,
+      "SCH": 104.53,
+      "THR": 122.86,
+      "KLE": 58.7,
+      "SAR": 0,
+      "MIS": 47.91,
+      "HLP": 47.52,
+      "VYF": 94.19,
+      "Itau": 171.03,
+      "Gritsly": 114.91,
+      "Premier": 164.69,
+      "Aliwal": 377.85,
+      "Ficksburg": 291.16,
+      "Klerksdorp": 199.54
+    }
+  },
+  {
+    "producer": "MIS",
+    "distances": {
+      "SPAR": 190.58,
+      "SAX": 179.05,
+      "SCH": 82.84,
+      "THR": 75.03,
+      "KLE": 80.3,
+      "SAR": 47.91,
+      "MIS": 0,
+      "HLP": 27.4,
+      "VYF": 90.85,
+      "Itau": 173.1,
+      "Gritsly": 67.08,
+      "Premier": 116.86,
+      "Aliwal": 379.92,
+      "Ficksburg": 243.33,
+      "Klerksdorp": 143.36
+    }
+  },
+  {
+    "producer": "HLP",
+    "distances": {
+      "SPAR": 204.41,
+      "SAX": 192.87,
+      "SCH": 96.67,
+      "THR": 88.86,
+      "KLE": 76.23,
+      "SAR": 47.52,
+      "MIS": 27.4,
+      "HLP": 0,
+      "VYF": 56.56,
+      "Itau": 188.57,
+      "Gritsly": 80.9,
+      "Premier": 130.69,
+      "Aliwal": 395.39,
+      "Ficksburg": 257.16,
+      "Klerksdorp": 133.16
+    }
+  },
+  {
+    "producer": "VYF",
+    "distances": {
+      "SPAR": 223.17,
+      "SAX": 225.91,
+      "SCH": 157.23,
+      "THR": 110.25,
+      "KLE": 122.89,
+      "SAR": 94.19,
+      "MIS": 90.85,
+      "HLP": 56.56,
+      "VYF": 0,
+      "Itau": 231.13,
+      "Gritsly": 97.55,
+      "Premier": 110.31,
+      "Aliwal": 437.95,
+      "Ficksburg": 275.92,
+      "Klerksdorp": 89.41
+    }
   }
 ]

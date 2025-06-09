@@ -6,5 +6,13 @@
     "role": "admin",
     "created": "2025-06-07T11:57:35.776Z",
     "active": true
+  },
+  {
+    "id": "1749405268721",
+    "email": "wian@gmail.com",
+    "passwordHash": "7e7b133ac212070329b32e76d6fbc9600fec4c8f6f869ae2e206f73257f56264",
+    "role": "member",
+    "created": "2025-06-08T17:54:53.099Z",
+    "active": true
   }
 ]
