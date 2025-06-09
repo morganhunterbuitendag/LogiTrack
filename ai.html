@@ -25,11 +25,14 @@
       border-radius: 9999px;
       border: 1px solid #cbd5e0;
       padding: 0.5rem 1rem;
-      width: 100%;
+      width: 75%;
     }
     #ask-btn {
       border-radius: 9999px;
       padding: 0.5rem 1.5rem;
+    }
+    #ai-message {
+      transition: opacity 0.5s;
     }
   </style>
 </head>
@@ -103,6 +106,7 @@
           <input id="ai-input" type="text" placeholder="Ask a question..." />
           <button id="ask-btn" class="bg-blue-600 hover:bg-blue-700 text-white">Ask</button>
         </div>
+        <div id="ai-message" class="mt-2 text-center text-red-600" style="display:none; opacity:0;"></div>
       </div>
     </div>
   </div>
