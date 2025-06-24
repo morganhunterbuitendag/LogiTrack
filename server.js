@@ -6,7 +6,10 @@ import jwt from 'jsonwebtoken';
 import nodemailer from 'nodemailer';
 import crypto from 'crypto';
 
-const DATA_DIR = path.join(process.cwd(), 'data');
+// Allow overriding the data directory location. On serverless platforms the
+// project directory may be read-only, so we fall back to a writeable temp path.
+const DATA_DIR = process.env.DATA_DIR ||
+  (process.env.VERCEL ? '/tmp/data' : path.join(process.cwd(), 'data'));
 const JWT_SECRET = 'change_this_secret'; // IMPORTANT: Change this and use an environment variable
 
 const app = express();
