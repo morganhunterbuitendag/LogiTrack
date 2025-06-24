@@ -3,7 +3,19 @@
   "builds": [
     {
       "src": "server.js",
-      "use": "@vercel/node"
+      "use": "@vercel/node",
+      "config": {
+        "includeFiles": [
+          "*.html",
+          "*.css",
+          "*.js",
+          "src/lib/ors.js",
+          "data/**",
+          "processors.json",
+          "producers.json",
+          "distances.json"
+        ]
+      }
     }
   ],
   "routes": [

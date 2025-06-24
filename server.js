@@ -359,10 +359,18 @@ app.post('/api/auth/change-password', async (req, res) => {
 
 // --- Static File Serving ---
 // This serves all the HTML, JS, and CSS files from the root of your project.
-app.use(express.static(process.cwd(), { 
+app.use(express.static(process.cwd(), {
     // Set default page to login.html
-    index: 'login.html' 
+    index: 'login.html'
 }));
+
+// Start the server when run directly (useful for local development)
+if (!process.env.VERCEL) {
+  const port = process.env.PORT || 3101;
+  app.listen(port, () => {
+    console.log(`Server running on http://localhost:${port}/`);
+  });
+}
 
 // Export the app for Vercel
 export default app;
