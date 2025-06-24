@@ -47,9 +47,22 @@ async function readArray(file) {
     const data = JSON.parse(await fs.readFile(filePath, 'utf8'));
     return Array.isArray(data) ? data : [];
   } catch (error) {
-    // If the file doesn't exist or is invalid JSON, return an empty array
     if (error.code === 'ENOENT') {
-      return [];
+      try {
+        const defaultPath = path.join(process.cwd(), 'data', file);
+        const fallbackData = JSON.parse(await fs.readFile(defaultPath, 'utf8'));
+        const arr = Array.isArray(fallbackData) ? fallbackData : [];
+        // Try to seed the writable directory for future writes
+        try {
+          await fs.writeFile(filePath, JSON.stringify(arr, null, 2));
+        } catch {}
+        return arr;
+      } catch (err2) {
+        if (err2.code !== 'ENOENT') {
+          console.error(`Error reading default ${file}:`, err2);
+        }
+        return [];
+      }
     }
     console.error(`Error reading or parsing ${file}:`, error);
     return [];
