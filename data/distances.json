@@ -538,5 +538,745 @@
       "Ficksburg": 275.92,
       "Klerksdorp": 89.41
     }
+  },
+  {
+    "producer": "Edla Boerdery",
+    "distances": {
+      "SPAR": 159.66,
+      "SAX": 117.98,
+      "SCH": 19.88,
+      "THR": 37.57,
+      "KLE": 36.86,
+      "SAR": 95.12,
+      "MIS": 73.42,
+      "HLP": 87.24,
+      "VYF": 147.79,
+      "Itau": 129.66,
+      "Gritsly": 63.69,
+      "Premier": 131.59,
+      "Aliwal": 336.48,
+      "Ficksburg": 211.22,
+      "Klerksdorp": 186.08
+    }
+  },
+  {
+    "producer": "Tewie Nel",
+    "distances": {
+      "SPAR": 200.76,
+      "SAX": 159.07,
+      "SCH": 80.6,
+      "THR": 93.3,
+      "KLE": 54.31,
+      "SAR": 39.69,
+      "MIS": 66.1,
+      "HLP": 65.71,
+      "VYF": 112.37,
+      "Itau": 141.33,
+      "Gritsly": 119.42,
+      "Premier": 187.33,
+      "Aliwal": 348.15,
+      "Ficksburg": 252.32,
+      "Klerksdorp": 217.72
+    }
+  },
+  {
+    "producer": "JJ Wilken",
+    "distances": {
+      "SPAR": 96.31,
+      "SAX": 84.53,
+      "SCH": 130.6,
+      "THR": 84.06,
+      "KLE": 143.02,
+      "SAR": 162.04,
+      "MIS": 114.21,
+      "HLP": 128.04,
+      "VYF": 139.45,
+      "Itau": 173.82,
+      "Gritsly": 59.02,
+      "Premier": 42.14,
+      "Aliwal": 380.65,
+      "Ficksburg": 149.06,
+      "Klerksdorp": 154.19
+    }
+  },
+  {
+    "producer": "AVR BDY",
+    "distances": {
+      "SPAR": 196.76,
+      "SAX": 155.08,
+      "SCH": 72.94,
+      "THR": 85.64,
+      "KLE": 27.11,
+      "SAR": 48.91,
+      "MIS": 66.83,
+      "HLP": 66.44,
+      "VYF": 113.11,
+      "Itau": 139.44,
+      "Gritsly": 111.76,
+      "Premier": 149.47,
+      "Aliwal": 346.26,
+      "Ficksburg": 248.32,
+      "Klerksdorp": 218.46
+    }
+  },
+  {
+    "producer": "ANDRE FAM TRUST",
+    "distances": {
+      "SPAR": 145.43,
+      "SAX": 96.81,
+      "SCH": 75.1,
+      "THR": 28.13,
+      "KLE": 87.09,
+      "SAR": 116.93,
+      "MIS": 69.1,
+      "HLP": 82.93,
+      "VYF": 104.31,
+      "Itau": 179.89,
+      "Gritsly": 20.21,
+      "Premier": 88.12,
+      "Aliwal": 386.71,
+      "Ficksburg": 190.05,
+      "Klerksdorp": 142.6
+    }
+  },
+  {
+    "producer": "MOOITOEKOMS",
+    "distances": {
+      "SPAR": 190.02,
+      "SAX": 148.34,
+      "SCH": 66.2,
+      "THR": 78.9,
+      "KLE": 20.36,
+      "SAR": 55.45,
+      "MIS": 73.38,
+      "HLP": 72.98,
+      "VYF": 119.65,
+      "Itau": 132.7,
+      "Gritsly": 105.02,
+      "Premier": 145.74,
+      "Aliwal": 339.52,
+      "Ficksburg": 241.58,
+      "Klerksdorp": 225
+    }
+  },
+  {
+    "producer": "Britspan",
+    "distances": {
+      "SPAR": 145.58,
+      "SAX": 134.04,
+      "SCH": 79.63,
+      "THR": 32.66,
+      "KLE": 91.63,
+      "SAR": 103.33,
+      "MIS": 55.5,
+      "HLP": 69.33,
+      "VYF": 82.29,
+      "Itau": 184.43,
+      "Gritsly": 19.96,
+      "Premier": 71.22,
+      "Aliwal": 391.25,
+      "Ficksburg": 198.33,
+      "Klerksdorp": 120.58
+    }
+  },
+  {
+    "producer": "AC Greyling",
+    "distances": {
+      "SPAR": 180.29,
+      "SAX": 138.61,
+      "SCH": 56.47,
+      "THR": 69.16,
+      "KLE": 12.32,
+      "SAR": 61.69,
+      "MIS": 79.62,
+      "HLP": 79.23,
+      "VYF": 125.89,
+      "Itau": 122.97,
+      "Gritsly": 95.29,
+      "Premier": 163.19,
+      "Aliwal": 329.79,
+      "Ficksburg": 231.85,
+      "Klerksdorp": 231.24
+    }
+  },
+  {
+    "producer": "Mc Grathspark",
+    "distances": {
+      "SPAR": 148.38,
+      "SAX": 106.7,
+      "SCH": 21.7,
+      "THR": 26.28,
+      "KLE": 33.69,
+      "SAR": 91.95,
+      "MIS": 70.25,
+      "HLP": 84.08,
+      "VYF": 136.51,
+      "Itau": 126.49,
+      "Gritsly": 52.41,
+      "Premier": 120.31,
+      "Aliwal": 333.31,
+      "Ficksburg": 199.94,
+      "Klerksdorp": 174.8
+    }
+  },
+  {
+    "producer": "Poppieland",
+    "distances": {
+      "SPAR": 190.4,
+      "SAX": 148.71,
+      "SCH": 66.57,
+      "THR": 79.27,
+      "KLE": 20.74,
+      "SAR": 43.02,
+      "MIS": 60.95,
+      "HLP": 60.55,
+      "VYF": 107.22,
+      "Itau": 133.08,
+      "Gritsly": 105.39,
+      "Premier": 173.3,
+      "Aliwal": 339.9,
+      "Ficksburg": 241.96,
+      "Klerksdorp": 212.57
+    }
+  },
+  {
+    "producer": "Fourie Boerdery",
+    "distances": {
+      "SPAR": 190.6,
+      "SAX": 179.07,
+      "SCH": 56.16,
+      "THR": 35.52,
+      "KLE": 53.61,
+      "SAR": 82.04,
+      "MIS": 34.21,
+      "HLP": 48.04,
+      "VYF": 92.27,
+      "Itau": 146.41,
+      "Gritsly": 67.1,
+      "Premier": 116.88,
+      "Aliwal": 353.23,
+      "Ficksburg": 243.35,
+      "Klerksdorp": 144.78
+    }
+  },
+  {
+    "producer": "Bakkes-Elmasdal",
+    "distances": {
+      "SPAR": 191.8,
+      "SAX": 180.26,
+      "SCH": 57.36,
+      "THR": 36.71,
+      "KLE": 54.81,
+      "SAR": 83.23,
+      "MIS": 35.41,
+      "HLP": 49.23,
+      "VYF": 93.47,
+      "Itau": 147.61,
+      "Gritsly": 68.3,
+      "Premier": 118.08,
+      "Aliwal": 354.43,
+      "Ficksburg": 244.55,
+      "Klerksdorp": 145.98
+    }
+  },
+  {
+    "producer": "CM Bakkes",
+    "distances": {
+      "SPAR": 193.74,
+      "SAX": 182.2,
+      "SCH": 62.69,
+      "THR": 42.05,
+      "KLE": 60.14,
+      "SAR": 74.72,
+      "MIS": 26.89,
+      "HLP": 40.72,
+      "VYF": 94.01,
+      "Itau": 152.94,
+      "Gritsly": 70.23,
+      "Premier": 120.02,
+      "Aliwal": 359.77,
+      "Ficksburg": 246.49,
+      "Klerksdorp": 146.51
+    }
+  },
+  {
+    "producer": "Las Vacus",
+    "distances": {
+      "SPAR": 238.54,
+      "SAX": 227.01,
+      "SCH": 130.81,
+      "THR": 122.99,
+      "KLE": 112.82,
+      "SAR": 84.11,
+      "MIS": 80.77,
+      "HLP": 46.48,
+      "VYF": 20.53,
+      "Itau": 221.06,
+      "Gritsly": 115.04,
+      "Premier": 124.62,
+      "Aliwal": 427.88,
+      "Ficksburg": 291.29,
+      "Klerksdorp": 96.75
+    }
+  },
+  {
+    "producer": "Henk Harmse",
+    "distances": {
+      "SPAR": 152.82,
+      "SAX": 111.14,
+      "SCH": 18.03,
+      "THR": 30.73,
+      "KLE": 30.02,
+      "SAR": 88.28,
+      "MIS": 60.11,
+      "HLP": 73.94,
+      "VYF": 140.95,
+      "Itau": 122.82,
+      "Gritsly": 56.85,
+      "Premier": 124.75,
+      "Aliwal": 329.64,
+      "Ficksburg": 204.38,
+      "Klerksdorp": 179.24
+    }
+  },
+  {
+    "producer": "Bonnas van Zyl",
+    "distances": {
+      "SPAR": 184.51,
+      "SAX": 172.98,
+      "SCH": 60.17,
+      "THR": 20.15,
+      "KLE": 68.37,
+      "SAR": 75.94,
+      "MIS": 28.12,
+      "HLP": 41.94,
+      "VYF": 86.18,
+      "Itau": 161.17,
+      "Gritsly": 61.01,
+      "Premier": 110.79,
+      "Aliwal": 367.99,
+      "Ficksburg": 237.26,
+      "Klerksdorp": 138.69
+    }
+  },
+  {
+    "producer": "HD van Schalkwyk",
+    "distances": {
+      "SPAR": 160.06,
+      "SAX": 118.38,
+      "SCH": 25.27,
+      "THR": 37.96,
+      "KLE": 29.96,
+      "SAR": 88.22,
+      "MIS": 58.66,
+      "HLP": 72.49,
+      "VYF": 116.73,
+      "Itau": 122.76,
+      "Gritsly": 64.08,
+      "Premier": 131.99,
+      "Aliwal": 329.59,
+      "Ficksburg": 211.62,
+      "Klerksdorp": 169.23
+    }
+  },
+  {
+    "producer": "Goudkop",
+    "distances": {
+      "SPAR": 160.57,
+      "SAX": 122.11,
+      "SCH": 51.41,
+      "THR": 4.44,
+      "KLE": 63.41,
+      "SAR": 100.76,
+      "MIS": 52.93,
+      "HLP": 66.76,
+      "VYF": 110.36,
+      "Itau": 156.21,
+      "Gritsly": 26.25,
+      "Premier": 94.16,
+      "Aliwal": 363.03,
+      "Ficksburg": 213.32,
+      "Klerksdorp": 148.65
+    }
+  },
+  {
+    "producer": "Hesla",
+    "distances": {
+      "SPAR": 189.79,
+      "SAX": 199.29,
+      "SCH": 123.84,
+      "THR": 76.87,
+      "KLE": 111.09,
+      "SAR": 111.43,
+      "MIS": 63.61,
+      "HLP": 67.22,
+      "VYF": 23.47,
+      "Itau": 203.89,
+      "Gritsly": 64.17,
+      "Premier": 83.69,
+      "Aliwal": 410.71,
+      "Ficksburg": 242.54,
+      "Klerksdorp": 91.21
+    }
+  },
+  {
+    "producer": "Uys van Heerden",
+    "distances": {
+      "SPAR": 161.44,
+      "SAX": 149.9,
+      "SCH": 95.49,
+      "THR": 48.52,
+      "KLE": 107.49,
+      "SAR": 119.19,
+      "MIS": 71.36,
+      "HLP": 85.19,
+      "VYF": 63.36,
+      "Itau": 200.29,
+      "Gritsly": 35.82,
+      "Premier": 87.08,
+      "Aliwal": 407.11,
+      "Ficksburg": 214.19,
+      "Klerksdorp": 101.64
+    }
+  },
+  {
+    "producer": "Eulogio",
+    "distances": {
+      "SPAR": 174.7,
+      "SAX": 163.16,
+      "SCH": 97.9,
+      "THR": 61.78,
+      "KLE": 95.35,
+      "SAR": 95.69,
+      "MIS": 47.86,
+      "HLP": 58.43,
+      "VYF": 28.32,
+      "Itau": 188.15,
+      "Gritsly": 49.08,
+      "Premier": 100.34,
+      "Aliwal": 394.97,
+      "Ficksburg": 227.45,
+      "Klerksdorp": 106.03
+    }
+  },
+  {
+    "producer": "toets",
+    "distances": {
+      "SPAR": 141.12,
+      "SAX": 111.45,
+      "SCH": 66.92,
+      "THR": 19.95,
+      "KLE": 78.91,
+      "SAR": 108.75,
+      "MIS": 60.92,
+      "HLP": 74.75,
+      "VYF": 96.14,
+      "Itau": 171.71,
+      "Gritsly": 6.8,
+      "Premier": 72.3,
+      "Aliwal": 378.54,
+      "Ficksburg": 193.87,
+      "Klerksdorp": 134.42
+    }
+  },
+  {
+    "producer": "Test Producer Ltd",
+    "distances": {
+      "SPAR": null,
+      "SAX": null,
+      "SCH": null,
+      "THR": null,
+      "KLE": null,
+      "SAR": null,
+      "MIS": null,
+      "HLP": null,
+      "VYF": null,
+      "Itau": null,
+      "Gritsly": null,
+      "Premier": null,
+      "Aliwal": null,
+      "Ficksburg": null,
+      "Klerksdorp": null
+    }
+  },
+  {
+    "producer": "Test Producer Ltd",
+    "distances": {
+      "SPAR": null,
+      "SAX": null,
+      "SCH": null,
+      "THR": null,
+      "KLE": null,
+      "SAR": null,
+      "MIS": null,
+      "HLP": null,
+      "VYF": null,
+      "Itau": null,
+      "Gritsly": null,
+      "Premier": null,
+      "Aliwal": null,
+      "Ficksburg": null,
+      "Klerksdorp": null
+    }
+  },
+  {
+    "producer": "Test Producer Ltd",
+    "distances": {
+      "SPAR": null,
+      "SAX": null,
+      "SCH": null,
+      "THR": null,
+      "KLE": null,
+      "SAR": null,
+      "MIS": null,
+      "HLP": null,
+      "VYF": null,
+      "Itau": null,
+      "Gritsly": null,
+      "Premier": null,
+      "Aliwal": null,
+      "Ficksburg": null,
+      "Klerksdorp": null
+    }
+  },
+  {
+    "producer": "Test Producer Ltd",
+    "distances": {
+      "SPAR": null,
+      "SAX": null,
+      "SCH": null,
+      "THR": null,
+      "KLE": null,
+      "SAR": null,
+      "MIS": null,
+      "HLP": null,
+      "VYF": null,
+      "Itau": null,
+      "Gritsly": null,
+      "Premier": null,
+      "Aliwal": null,
+      "Ficksburg": null,
+      "Klerksdorp": null
+    }
+  },
+  {
+    "producer": "Test Producer Ltd",
+    "distances": {
+      "SPAR": null,
+      "SAX": null,
+      "SCH": null,
+      "THR": null,
+      "KLE": null,
+      "SAR": null,
+      "MIS": null,
+      "HLP": null,
+      "VYF": null,
+      "Itau": null,
+      "Gritsly": null,
+      "Premier": null,
+      "Aliwal": null,
+      "Ficksburg": null,
+      "Klerksdorp": null
+    }
+  },
+  {
+    "producer": "Test Producer Ltd",
+    "distances": {
+      "SPAR": null,
+      "SAX": null,
+      "SCH": null,
+      "THR": null,
+      "KLE": null,
+      "SAR": null,
+      "MIS": null,
+      "HLP": null,
+      "VYF": null,
+      "Itau": null,
+      "Gritsly": null,
+      "Premier": null,
+      "Aliwal": null,
+      "Ficksburg": null,
+      "Klerksdorp": null
+    }
+  },
+  {
+    "producer": "Test Producer Ltd",
+    "distances": {
+      "SPAR": null,
+      "SAX": null,
+      "SCH": null,
+      "THR": null,
+      "KLE": null,
+      "SAR": null,
+      "MIS": null,
+      "HLP": null,
+      "VYF": null,
+      "Itau": null,
+      "Gritsly": null,
+      "Premier": null,
+      "Aliwal": null,
+      "Ficksburg": null,
+      "Klerksdorp": null
+    }
+  },
+  {
+    "producer": "Test Producer Ltd",
+    "distances": {
+      "SPAR": null,
+      "SAX": null,
+      "SCH": null,
+      "THR": null,
+      "KLE": null,
+      "SAR": null,
+      "MIS": null,
+      "HLP": null,
+      "VYF": null,
+      "Itau": null,
+      "Gritsly": null,
+      "Premier": null,
+      "Aliwal": null,
+      "Ficksburg": null,
+      "Klerksdorp": null
+    }
+  },
+  {
+    "producer": "Test Producer Ltd",
+    "distances": {
+      "SPAR": null,
+      "SAX": null,
+      "SCH": null,
+      "THR": null,
+      "KLE": null,
+      "SAR": null,
+      "MIS": null,
+      "HLP": null,
+      "VYF": null,
+      "Itau": null,
+      "Gritsly": null,
+      "Premier": null,
+      "Aliwal": null,
+      "Ficksburg": null,
+      "Klerksdorp": null
+    }
+  },
+  {
+    "producer": "Test Producer Ltd",
+    "distances": {
+      "SPAR": null,
+      "SAX": null,
+      "SCH": null,
+      "THR": null,
+      "KLE": null,
+      "SAR": null,
+      "MIS": null,
+      "HLP": null,
+      "VYF": null,
+      "Itau": null,
+      "Gritsly": null,
+      "Premier": null,
+      "Aliwal": null,
+      "Ficksburg": null,
+      "Klerksdorp": null
+    }
+  },
+  {
+    "producer": "Test Producer Ltd",
+    "distances": {
+      "SPAR": null,
+      "SAX": null,
+      "SCH": null,
+      "THR": null,
+      "KLE": null,
+      "SAR": null,
+      "MIS": null,
+      "HLP": null,
+      "VYF": null,
+      "Itau": null,
+      "Gritsly": null,
+      "Premier": null,
+      "Aliwal": null,
+      "Ficksburg": null,
+      "Klerksdorp": null
+    }
+  },
+  {
+    "producer": "Test Producer Ltd",
+    "distances": {
+      "SPAR": null,
+      "SAX": null,
+      "SCH": null,
+      "THR": null,
+      "KLE": null,
+      "SAR": null,
+      "MIS": null,
+      "HLP": null,
+      "VYF": null,
+      "Itau": null,
+      "Gritsly": null,
+      "Premier": null,
+      "Aliwal": null,
+      "Ficksburg": null,
+      "Klerksdorp": null
+    }
+  },
+  {
+    "producer": "Acme Farms",
+    "distances": {
+      "SPAR": null,
+      "SAX": null,
+      "SCH": null,
+      "THR": null,
+      "KLE": null,
+      "SAR": null,
+      "MIS": null,
+      "HLP": null,
+      "VYF": null,
+      "Itau": null,
+      "Gritsly": null,
+      "Premier": null,
+      "Aliwal": null,
+      "Ficksburg": null,
+      "Klerksdorp": null
+    }
+  },
+  {
+    "producer": "Acme Farms",
+    "distances": {
+      "SPAR": null,
+      "SAX": null,
+      "SCH": null,
+      "THR": null,
+      "KLE": null,
+      "SAR": null,
+      "MIS": null,
+      "HLP": null,
+      "VYF": null,
+      "Itau": null,
+      "Gritsly": null,
+      "Premier": null,
+      "Aliwal": null,
+      "Ficksburg": null,
+      "Klerksdorp": null
+    }
+  },
+  {
+    "producer": "Acme Farms",
+    "distances": {
+      "SPAR": null,
+      "SAX": null,
+      "SCH": null,
+      "THR": null,
+      "KLE": null,
+      "SAR": null,
+      "MIS": null,
+      "HLP": null,
+      "VYF": null,
+      "Itau": null,
+      "Gritsly": null,
+      "Premier": null,
+      "Aliwal": null,
+      "Ficksburg": null,
+      "Klerksdorp": null
+    }
   }
 ]
