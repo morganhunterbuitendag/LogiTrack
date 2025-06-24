@@ -22,7 +22,19 @@ app.get('/config.js', (req, res) => {
 // --- Utility Functions ---
 
 async function ensureDir() {
-  await fs.mkdir(DATA_DIR, { recursive: true });
+  try {
+    await fs.mkdir(DATA_DIR, { recursive: true });
+  } catch (err) {
+    if (err.code === 'EEXIST') {
+      const stats = await fs.stat(DATA_DIR);
+      if (!stats.isDirectory()) {
+        await fs.rm(DATA_DIR);
+        await fs.mkdir(DATA_DIR, { recursive: true });
+      }
+    } else {
+      throw err;
+    }
+  }
 }
 
 async function readArray(file) {
@@ -400,6 +412,10 @@ app.use(express.static(process.cwd(), {
 // Start the server when run directly (useful for local development)
 if (!process.env.VERCEL) {
   const port = process.env.PORT || 3101;
+  // Ensure data directory exists before starting
+  ensureDir().catch(err => {
+    console.error('Failed to create data directory:', err);
+  });
   app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}/`);
   });
