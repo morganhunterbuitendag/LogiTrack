@@ -301,7 +301,9 @@ app.post('/api/auth/login', async (req, res) => {
     if (user.passwordHash !== passwordHash) return res.status(401).json({ error: 'invalid credentials' });
 
     const token = jwt.sign({ email: user.email, role: user.role }, JWT_SECRET, { expiresIn: '1h' });
-    res.cookie('auth', token, { httpOnly: true, secure: true, sameSite: 'strict' });
+    // Use secure cookies only in production so local development over HTTP works
+    const secure = process.env.NODE_ENV === 'production';
+    res.cookie('auth', token, { httpOnly: true, secure, sameSite: 'strict' });
     res.json({ ok: true });
   } catch (err) {
     console.error(err);
@@ -359,6 +361,37 @@ app.post('/api/auth/change-password', async (req, res) => {
 
 // --- Static File Serving ---
 // This serves all the HTML, JS, and CSS files from the root of your project.
+// Middleware to protect HTML pages from unauthenticated access
+app.use((req, res, next) => {
+  const publicPages = ['/login.html', '/register.html', '/forgot.html', '/reset.html'];
+  if (req.path === '/' || req.path.endsWith('.html')) {
+    if (!publicPages.includes(req.path) && req.path !== '/') {
+      const token = req.cookies.auth;
+      if (!token) return res.redirect('/login.html');
+      try {
+        jwt.verify(token, JWT_SECRET);
+      } catch {
+        res.clearCookie('auth');
+        return res.redirect('/login.html');
+      }
+    }
+  }
+  next();
+});
+
+// Redirect the root path to the main page when authenticated
+app.get('/', (req, res) => {
+  const token = req.cookies.auth;
+  if (!token) return res.redirect('/login.html');
+  try {
+    jwt.verify(token, JWT_SECRET);
+    return res.redirect('/Index.html');
+  } catch {
+    res.clearCookie('auth');
+    return res.redirect('/login.html');
+  }
+});
+
 app.use(express.static(process.cwd(), {
     // Set default page to login.html
     index: 'login.html'
