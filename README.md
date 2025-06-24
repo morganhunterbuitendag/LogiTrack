@@ -22,6 +22,15 @@ Run tests with:
 npm test
 ```
 
+### Build
+
+This project does not require a compilation step. The `build` script simply
+outputs a message confirming that all files are ready to use:
+
+```bash
+npm run build
+```
+
 ### Password reset emails
 
 To enable password reset emails, set the following environment variables before

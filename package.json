@@ -5,7 +5,8 @@
   "main": "addProducer.js",
   "scripts": {
     "start": "node server.js",
-    "test": "NODE_OPTIONS=--experimental-vm-modules jest"
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest",
+    "build": "node build.js"
   },
   "keywords": [],
   "author": "",
