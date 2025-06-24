@@ -47,9 +47,21 @@ async function readArray(file) {
     const data = JSON.parse(await fs.readFile(filePath, 'utf8'));
     return Array.isArray(data) ? data : [];
   } catch (error) {
-    // If the file doesn't exist or is invalid JSON, return an empty array
+    // If the file doesn't exist, attempt to copy it from the packaged data
     if (error.code === 'ENOENT') {
-      return [];
+      try {
+        const initialPath = path.join(process.cwd(), 'data', file);
+        const initialData = await fs.readFile(initialPath, 'utf8');
+        await fs.writeFile(filePath, initialData);
+        const data = JSON.parse(initialData);
+        return Array.isArray(data) ? data : [];
+      } catch (copyErr) {
+        // If we can't copy the initial file, create an empty array file
+        try {
+          await fs.writeFile(filePath, '[]');
+        } catch {}
+        return [];
+      }
     }
     console.error(`Error reading or parsing ${file}:`, error);
     return [];
