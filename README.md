@@ -22,6 +22,12 @@ Run tests with:
 npm test
 ```
 
+### Data directory
+
+The server stores JSON data in a `data/` folder. When deploying to a platform
+with a read-only filesystem (e.g. Vercel) specify a writable location with the
+`DATA_DIR` environment variable. `/tmp/data` is a good default on such systems.
+
 ### Build
 
 This project does not require a compilation step. The `build` script simply
