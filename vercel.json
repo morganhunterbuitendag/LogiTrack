@@ -13,7 +13,10 @@
           "data/**",
           "processors.json",
           "producers.json",
-          "distances.json"
+          "distances.json",
+          "pending-users.json",
+          "reset-tokens.json",
+          "users.json"
         ]
       }
     }
