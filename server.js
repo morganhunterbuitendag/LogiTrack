@@ -162,7 +162,8 @@ app.post('/api/pending-users', async (req, res) => {
     }
     const pending = await readArray('pending-users.json');
     const id = Date.now().toString();
-    pending.push({ id, email, passwordHash, requested: new Date().toISOString() });
+    const normEmail = email.trim().toLowerCase();
+    pending.push({ id, email: normEmail, passwordHash, requested: new Date().toISOString() });
     await writeArray('pending-users.json', pending);
     res.sendStatus(200);
   } catch (err) {
@@ -194,11 +195,11 @@ app.post('/api/pending-users/:id/approve', async (req, res) => {
     const users = await readArray('users.json');
     users.push({
       id: record.id,
-      email: record.email,
+      email: record.email.toLowerCase(),
       passwordHash: record.passwordHash,
       role: 'member',
       created: new Date().toISOString(),
-      active: true
+      active: false
     });
     await writeArray('users.json', users);
     res.json({ ok: true });
@@ -261,6 +262,25 @@ app.post('/api/users/:id/deactivate', async (req, res) => {
   }
 });
 
+app.post('/api/users/:id/role', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { role } = req.body || {};
+    if (!['admin', 'member'].includes(role)) {
+      return res.status(400).json({ error: 'invalid role' });
+    }
+    const users = await readArray('users.json');
+    const user = users.find(u => u.id === id);
+    if (!user) return res.sendStatus(404);
+    user.role = role;
+    await writeArray('users.json', users);
+    res.json({ ok: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'server error' });
+  }
+});
+
 app.delete('/api/users/:id', async (req, res) => {
   try {
     const { id } = req.params;
@@ -280,15 +300,16 @@ app.post('/api/auth/forgot', async (req, res) => {
   try {
     const { email } = req.body || {};
     if (typeof email !== 'string') return res.status(400).json({ error: 'invalid request' });
-    
+
+    const emailNorm = email.trim().toLowerCase();
     const users = await readArray('users.json');
-    const user = users.find(u => u.email === email);
+    const user = users.find(u => u.email === emailNorm);
     if (user) {
       const token = generateToken();
       const tokenHash = sha256(token);
-      
+
       const tokens = await readArray('reset-tokens.json');
-      tokens.push({ tokenHash, email, expires: Date.now() + 3600_000 }); // Expires in 1 hour
+      tokens.push({ tokenHash, email: emailNorm, expires: Date.now() + 3600_000 }); // Expires in 1 hour
       await writeArray('reset-tokens.json', tokens);
       
       const link = `${req.protocol}://${req.get('host')}/reset.html?token=${token}`;
@@ -334,8 +355,9 @@ app.post('/api/auth/reset', async (req, res) => {
 app.post('/api/auth/login', async (req, res) => {
   try {
     const { email, passwordHash } = req.body || {};
+    const emailNorm = typeof email === 'string' ? email.trim().toLowerCase() : '';
     const users = await readArray('users.json');
-    const user = users.find(u => u.email === email);
+    const user = users.find(u => u.email === emailNorm);
 
     if (!user) return res.status(401).json({ error: 'invalid credentials' });
     if (!['member', 'admin'].includes(user.role)) return res.status(403).json({ error: 'account pending approval' });
