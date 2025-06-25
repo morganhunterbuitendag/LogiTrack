@@ -29,16 +29,22 @@ let currentDistances = null;
 let reorderMode = false;
 
 async function loadProducers(){
-  const cached = localStorage.getItem('producers');
-  if(cached){
-    try{ producers = JSON.parse(cached); }catch{ producers = []; }
-  }
+  try{
+    const res = await fetch('/api/producers',{cache:'no-store'});
+    if(res.ok) producers = await res.json();
+  }catch{}
   if(!Array.isArray(producers) || producers.length === 0){
-    try{
-      const res = await fetch('producers.json',{cache:'no-store'});
-      if(!res.ok) throw new Error('fetch failed');
-      producers = await res.json();
-    }catch(err){
+    const cached = localStorage.getItem('producers');
+    if(cached){
+      try{ producers = JSON.parse(cached); }catch{}
+    }
+    if(!Array.isArray(producers) || producers.length === 0){
+      try{
+        const res = await fetch('producers.json',{cache:'no-store'});
+        if(res.ok) producers = await res.json();
+      }catch{}
+    }
+    if(!Array.isArray(producers) || producers.length === 0){
       producers = [
         {lat:-27.413064112082218,lon:26.39355653815821,name:'Sf Haasbroek'},
         {lat:-27.69152172672409, lon:26.44368253816803,name:'Cornelia'},
@@ -293,11 +299,15 @@ distUploadBtn.addEventListener('click', async ()=>{
   distDialog.close();
 });
 
-function persistProducers(){
+async function persistProducers(){
   localStorage.setItem('producers',JSON.stringify(producers));
-  const blob=new Blob([JSON.stringify(producers,null,2)],{type:'application/json'});
-  const a=Object.assign(document.createElement('a'),{href:URL.createObjectURL(blob),download:'producers.json'});
-  document.body.appendChild(a);a.click();URL.revokeObjectURL(a.href);a.remove();
+  try{
+    await fetch('/api/producers',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(producers)});
+  }catch(err){
+    const blob=new Blob([JSON.stringify(producers,null,2)],{type:'application/json'});
+    const a=Object.assign(document.createElement('a'),{href:URL.createObjectURL(blob),download:'producers.json'});
+    document.body.appendChild(a);a.click();URL.revokeObjectURL(a.href);a.remove();
+  }
 }
 
 async function saveDistanceRecord(obj){
