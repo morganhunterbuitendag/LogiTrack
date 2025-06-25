@@ -22,11 +22,13 @@ Run tests with:
 npm test
 ```
 
-### Data directory
+### Data storage
 
-The server stores JSON data in a `data/` folder. When deploying to a platform
-with a read-only filesystem (e.g. Vercel) specify a writable location with the
-`DATA_DIR` environment variable. `/tmp/data` is a good default on such systems.
+Data such as users and producers is stored using
+[Vercel KV](https://vercel.com/docs/storage/vercel-kv). When running locally you
+need the `KV_REST_API_URL` and `KV_REST_API_TOKEN` (or the corresponding
+`UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN`) environment variables
+so the server can access the KV database.
 
 ### Build
 
@@ -50,3 +52,13 @@ SMTP_PASS     # password
 SMTP_SECURE   # set to "true" if the server requires TLS
 ```
 If these variables are not set, reset links are printed to the console.
+
+### Creating an admin user
+
+If all users have been removed you can add a new administrator via Vercel KV:
+
+```bash
+node addAdmin.js morganbuitendag@gmail.com Compal01
+```
+
+Ensure the KV connection environment variables are set before running the script.
