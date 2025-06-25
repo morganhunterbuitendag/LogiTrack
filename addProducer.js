@@ -5,13 +5,13 @@ let processors = [];
 
 async function loadData(){
   try{
-    const prodRes = await fetch('producers.json',{cache:'no-store'});
+    const prodRes = await fetch('/api/producers',{cache:'no-store'});
     if(prodRes.ok){
       producers = await prodRes.json();
     }
   }catch{}
   try{
-    const procRes = await fetch('processors.json',{cache:'no-store'});
+    const procRes = await fetch('/api/processors',{cache:'no-store'});
     if(procRes.ok){
       processors = await procRes.json();
     }

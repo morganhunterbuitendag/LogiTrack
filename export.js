@@ -113,19 +113,22 @@ async function exportToExcel(){
 (async () => {
   async function loadList(key, url, fallback){
     let arr;
-    const cached = localStorage.getItem(key);
-    if(cached){
-      try{ arr = JSON.parse(cached); }catch{}
-    }
-    if(!Array.isArray(arr) || arr.length === 0){
+    try{
       arr = await fetchJSON(url, fallback);
+    }catch{
+      const cached = localStorage.getItem(key);
+      if(cached){
+        try{ arr = JSON.parse(cached); }catch{}
+      }
     }
+    if(!Array.isArray(arr)) arr = [];
+    localStorage.setItem(key, JSON.stringify(arr));
     return arr;
   }
   try{
     const [producers, processors, records] = await Promise.all([
-      loadList('producers','producers.json'),
-      loadList('processors','processors.json'),
+      loadList('producers','/api/producers'),
+      loadList('processors','/api/processors'),
       fetchJSON('/api/distances', 'data/distances.json')
     ]);
     const matrix = {};

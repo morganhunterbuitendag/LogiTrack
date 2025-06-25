@@ -53,18 +53,16 @@ let farms=[];
 
 async function loadList(key,url,fallback){
   let arr;
-  const cached=localStorage.getItem(key);
-  if(cached){
-    try{ arr=JSON.parse(cached); }catch{}
-  }
-  if(!Array.isArray(arr) || arr.length===0){
-    try{
-      const res=await fetch(url,{cache:'no-store'});
-      if(!res.ok) throw new Error('bad');
-      arr=await res.json();
-    }catch(e){
-      arr=fallback;
+  try{
+    const res=await fetch(url,{cache:'no-store'});
+    if(!res.ok) throw new Error('bad');
+    arr=await res.json();
+  }catch(e){
+    const cached=localStorage.getItem(key);
+    if(cached){
+      try{ arr=JSON.parse(cached); }catch{}
     }
+    if(!Array.isArray(arr)) arr=fallback;
   }
   if(Array.isArray(arr)){
     arr=arr.map(o=>({lat:+o.lat,lon:+o.lon,name:o.name}));
@@ -191,8 +189,8 @@ function renderMap(farm){
 
 async function init(){
   [farms,depots]=await Promise.all([
-    loadList('producers','producers.json', DEFAULT_FARMS),
-    loadList('processors','processors.json', DEFAULT_DEPOTS)
+    loadList('producers','/api/producers', DEFAULT_FARMS),
+    loadList('processors','/api/processors', DEFAULT_DEPOTS)
   ]);
   await loadDistanceMatrix();
   populateSelectors();

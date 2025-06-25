@@ -164,6 +164,52 @@ app.delete('/api/distances/:producer', async (req, res) => {
     }
 });
 
+// Producers API
+app.get('/api/producers', async (req, res) => {
+  try {
+    const list = await readArray('producers.json');
+    res.json(list);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'server error' });
+  }
+});
+
+app.post('/api/producers', async (req, res) => {
+  try {
+    const arr = req.body;
+    if (!Array.isArray(arr)) return res.status(400).json({ error: 'invalid data' });
+    await writeArray('producers.json', arr);
+    res.json({ ok: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'server error' });
+  }
+});
+
+// Processors API
+app.get('/api/processors', async (req, res) => {
+  try {
+    const list = await readArray('processors.json');
+    res.json(list);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'server error' });
+  }
+});
+
+app.post('/api/processors', async (req, res) => {
+  try {
+    const arr = req.body;
+    if (!Array.isArray(arr)) return res.status(400).json({ error: 'invalid data' });
+    await writeArray('processors.json', arr);
+    res.json({ ok: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'server error' });
+  }
+});
+
 
 app.post('/api/pending-users', async (req, res) => {
   try {

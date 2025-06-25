@@ -22,16 +22,22 @@ let processors = [];
 let reorderMode = false;
 
 async function loadProcessors(){
-  const cached = localStorage.getItem('processors');
-  if(cached){
-    try{ processors = JSON.parse(cached); }catch{ processors = []; }
-  }
+  try{
+    const res = await fetch('/api/processors',{cache:'no-store'});
+    if(res.ok) processors = await res.json();
+  }catch{}
   if(!Array.isArray(processors) || processors.length === 0){
-    try{
-      const res = await fetch('processors.json',{cache:'no-store'});
-      if(!res.ok) throw new Error('fetch failed');
-      processors = await res.json();
-    }catch(err){
+    const cached = localStorage.getItem('processors');
+    if(cached){
+      try{ processors = JSON.parse(cached); }catch{}
+    }
+    if(!Array.isArray(processors) || processors.length === 0){
+      try{
+        const res = await fetch('processors.json',{cache:'no-store'});
+        if(res.ok) processors = await res.json();
+      }catch{}
+    }
+    if(!Array.isArray(processors) || processors.length === 0){
       processors = [
         {lat:-28.581154919405076,lon:27.486046667781952,name:"SPAR"},
         {lat:-28.46120571688839,lon:27.226272595865517,name:"SAX"},
@@ -49,9 +55,10 @@ async function loadProcessors(){
         {lat:-28.865702375034086,lon:27.87487832537334,name:"Ficksburg"},
         {lat:-26.891791143416583,lon:26.66169294714649,name:"Klerksdorp"},
       ];
+    }
   }
   localStorage.setItem('processors', JSON.stringify(processors));
-}}
+}
 
 function renderList(){
   listEl.innerHTML='';
@@ -165,11 +172,15 @@ form.addEventListener('submit',e=>{
   modal.close();
 });
 
-function persistProcessors(){
+async function persistProcessors(){
   localStorage.setItem('processors',JSON.stringify(processors));
-  const blob=new Blob([JSON.stringify(processors,null,2)],{type:'application/json'});
-  const a=Object.assign(document.createElement('a'),{href:URL.createObjectURL(blob),download:'processors.json'});
-  document.body.appendChild(a);a.click();URL.revokeObjectURL(a.href);a.remove();
+  try{
+    await fetch('/api/processors',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(processors)});
+  }catch(err){
+    const blob=new Blob([JSON.stringify(processors,null,2)],{type:'application/json'});
+    const a=Object.assign(document.createElement('a'),{href:URL.createObjectURL(blob),download:'processors.json'});
+    document.body.appendChild(a);a.click();URL.revokeObjectURL(a.href);a.remove();
+  }
 }
 
 (async function init(){
