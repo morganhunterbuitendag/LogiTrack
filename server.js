@@ -1,15 +1,11 @@
 import express from 'express';
-import fs from 'fs/promises';
-import path from 'path';
+import { kv } from '@vercel/kv';
 import cookieParser from 'cookie-parser';
 import jwt from 'jsonwebtoken';
 import nodemailer from 'nodemailer';
 import crypto from 'crypto';
 
-// Allow overriding the data directory location. On serverless platforms the
-// project directory may be read-only, so we fall back to a writeable temp path.
-const DATA_DIR = process.env.DATA_DIR ||
-  (process.env.VERCEL ? '/tmp/data' : path.join(process.cwd(), 'data'));
+// Data is now stored in Vercel KV using the original filenames as keys.
 const JWT_SECRET = 'change_this_secret'; // IMPORTANT: Change this and use an environment variable
 
 const app = express();
@@ -24,54 +20,18 @@ app.get('/config.js', (req, res) => {
 
 // --- Utility Functions ---
 
-async function ensureDir() {
-  try {
-    await fs.mkdir(DATA_DIR, { recursive: true });
-  } catch (err) {
-    if (err.code === 'EEXIST') {
-      const stats = await fs.stat(DATA_DIR);
-      if (!stats.isDirectory()) {
-        await fs.rm(DATA_DIR);
-        await fs.mkdir(DATA_DIR, { recursive: true });
-      }
-    } else {
-      throw err;
-    }
-  }
-}
-
 async function readArray(file) {
-  await ensureDir();
-  const filePath = path.join(DATA_DIR, file);
   try {
-    const data = JSON.parse(await fs.readFile(filePath, 'utf8'));
+    const data = await kv.get(file);
     return Array.isArray(data) ? data : [];
   } catch (error) {
-    // If the file doesn't exist, attempt to copy it from the packaged data
-    if (error.code === 'ENOENT') {
-      try {
-        const initialPath = path.join(process.cwd(), 'data', file);
-        const initialData = await fs.readFile(initialPath, 'utf8');
-        await fs.writeFile(filePath, initialData);
-        const data = JSON.parse(initialData);
-        return Array.isArray(data) ? data : [];
-      } catch (copyErr) {
-        // If we can't copy the initial file, create an empty array file
-        try {
-          await fs.writeFile(filePath, '[]');
-        } catch {}
-        return [];
-      }
-    }
-    console.error(`Error reading or parsing ${file}:`, error);
+    console.error(`Error reading ${file}:`, error);
     return [];
   }
 }
 
 async function writeArray(file, arr) {
-  await ensureDir();
-  const filePath = path.join(DATA_DIR, file);
-  await fs.writeFile(filePath, JSON.stringify(arr, null, 2));
+  await kv.set(file, arr);
 }
 
 async function append(file, obj) {
@@ -464,10 +424,6 @@ app.use(express.static(process.cwd(), {
 // Start the server when run directly (useful for local development)
 if (!process.env.VERCEL) {
   const port = process.env.PORT || 3101;
-  // Ensure data directory exists before starting
-  ensureDir().catch(err => {
-    console.error('Failed to create data directory:', err);
-  });
   app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}/`);
   });
