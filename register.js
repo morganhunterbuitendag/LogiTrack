@@ -9,6 +9,7 @@ const passInput = document.getElementById('reg-password');
 const toggleBtn = document.getElementById('toggle-pass');
 const strength = document.getElementById('pass-strength');
 const success = document.getElementById('register-success');
+const errorEl = document.getElementById('register-error');
 
 function validate(){
   const email = emailInput.value.trim();
@@ -31,6 +32,7 @@ form.addEventListener('submit', async e => {
   e.preventDefault();
   if(!validate()) return;
   const passwordHash = await sha256(passInput.value);
+  errorEl.textContent = '';
   const res = await fetch('/api/pending-users', {
     method:'POST',
     headers:{'Content-Type':'application/json'},
@@ -39,5 +41,9 @@ form.addEventListener('submit', async e => {
   if(res.ok){
     form.classList.add('d-none');
     success.classList.remove('d-none');
+  } else {
+    let msg = 'Server error';
+    try { const data = await res.json(); if(data && data.error) msg = data.error; } catch {}
+    errorEl.textContent = msg;
   }
 });

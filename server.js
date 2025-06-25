@@ -6,6 +6,9 @@ import nodemailer from 'nodemailer';
 import crypto from 'crypto';
 import fs from 'fs/promises';
 
+// Fallback storage when writing to disk fails (e.g. read-only file system)
+const memoryStore = {};
+
 // Data is now stored in Vercel KV using the original filenames as keys.
 const JWT_SECRET = 'change_this_secret'; // IMPORTANT: Change this and use an environment variable
 
@@ -37,7 +40,7 @@ async function readArray(file) {
     return Array.isArray(data) ? data : [];
   } catch (err) {
     if (err.code !== 'ENOENT') console.error(`Error reading ${file}:`, err);
-    return [];
+    return memoryStore[file] || [];
   }
 }
 
@@ -50,7 +53,12 @@ async function writeArray(file, arr) {
       console.error(`Error writing ${file} to KV:`, err);
     }
   }
-  await fs.writeFile(file, JSON.stringify(arr, null, 2));
+  try {
+    await fs.writeFile(file, JSON.stringify(arr, null, 2));
+  } catch (err) {
+    console.error(`Error writing ${file}:`, err);
+    memoryStore[file] = arr;
+  }
 }
 
 async function append(file, obj) {
@@ -87,16 +95,18 @@ async function sendEmail(to, subject, text) {
 async function ensureDefaultAdmin() {
   const users = await readArray('users.json');
   if (users.length === 0) {
+    const email = process.env.DEFAULT_ADMIN_EMAIL || 'admin@example.com';
+    const pwd = process.env.DEFAULT_ADMIN_PASSWORD || 'admin123';
     users.push({
       id: Date.now().toString(),
-      email: 'admin@example.com',
-      passwordHash: sha256('admin123'),
+      email,
+      passwordHash: sha256(pwd),
       role: 'admin',
       created: new Date().toISOString(),
       active: true
     });
     await writeArray('users.json', users);
-    console.log('Created default admin user admin@example.com / admin123');
+    console.log(`Created default admin user ${email} / ${pwd}`);
   }
 }
 ensureDefaultAdmin().catch(err => console.error('Failed to ensure admin user:', err));
