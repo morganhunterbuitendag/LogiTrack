@@ -14,6 +14,10 @@ const JWT_SECRET = 'change_this_secret'; // IMPORTANT: Change this and use an en
 
 const useKv = Boolean(process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL);
 
+if (process.env.VERCEL && !useKv) {
+  console.warn('WARNING: no KV database configured. Data will not persist. Set KV_REST_API_URL and KV_REST_API_TOKEN to enable persistence.');
+}
+
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
@@ -163,6 +167,9 @@ app.delete('/api/distances/:producer', async (req, res) => {
 
 app.post('/api/pending-users', async (req, res) => {
   try {
+    if (process.env.VERCEL && !useKv) {
+      return res.status(503).json({ error: 'persistent storage not configured' });
+    }
     const { email, passwordHash } = req.body || {};
     if (typeof email !== 'string' || typeof passwordHash !== 'string') {
       return res.status(400).json({ error: 'invalid request' });
@@ -181,6 +188,9 @@ app.post('/api/pending-users', async (req, res) => {
 
 app.get('/api/pending-users', async (req, res) => {
   try {
+    if (process.env.VERCEL && !useKv) {
+      return res.status(503).json({ error: 'persistent storage not configured' });
+    }
     const pending = await readArray('pending-users.json');
     res.json(pending);
   } catch (err) {
@@ -191,6 +201,9 @@ app.get('/api/pending-users', async (req, res) => {
 
 app.post('/api/pending-users/:id/approve', async (req, res) => {
   try {
+    if (process.env.VERCEL && !useKv) {
+      return res.status(503).json({ error: 'persistent storage not configured' });
+    }
     const { id } = req.params;
     const pending = await readArray('pending-users.json');
     const idx = pending.findIndex(p => p.id === id);
@@ -218,6 +231,9 @@ app.post('/api/pending-users/:id/approve', async (req, res) => {
 
 app.post('/api/pending-users/:id/reject', async (req, res) => {
   try {
+    if (process.env.VERCEL && !useKv) {
+      return res.status(503).json({ error: 'persistent storage not configured' });
+    }
     const { id } = req.params;
     let pending = await readArray('pending-users.json');
     pending = pending.filter(p => p.id !== id);

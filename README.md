@@ -30,6 +30,22 @@ need the `KV_REST_API_URL` and `KV_REST_API_TOKEN` (or the corresponding
 `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN`) environment variables
 so the server can access the KV database.
 
+Without these variables the application falls back to storing data on disk or in
+memory. This works for local development but **does not persist** in serverless
+deployments (for example on Vercel). In such environments user registrations are
+lost and the admin board will show no pending approvals. Ensure the KV
+connection variables are configured when deploying.
+
+#### Setting up KV on Vercel
+
+1. In your Vercel dashboard go to **Storage → KV** and create a new database.
+2. From the database page copy the `KV_REST_API_URL` and `KV_REST_API_TOKEN` values.
+3. Add these values as environment variables in your Vercel project settings or in a local `.env` file when testing locally.
+4. Redeploy or restart the project so the new variables take effect.
+
+Without this setup the server prints a warning and the registration API returns a
+`503` error on Vercel because data cannot be persisted.
+
 ### Build
 
 This project does not require a compilation step. The `build` script simply
