@@ -1,4 +1,7 @@
 (async () => {
+  if(window.self !== window.top){
+    return;
+  }
   let info = document.getElementById('user-info');
   if(!info){
     const header = document.querySelector('header');
