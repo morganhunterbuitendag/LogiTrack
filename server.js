@@ -4,9 +4,12 @@ import cookieParser from 'cookie-parser';
 import jwt from 'jsonwebtoken';
 import nodemailer from 'nodemailer';
 import crypto from 'crypto';
+import fs from 'fs/promises';
 
 // Data is now stored in Vercel KV using the original filenames as keys.
 const JWT_SECRET = 'change_this_secret'; // IMPORTANT: Change this and use an environment variable
+
+const useKv = Boolean(process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL);
 
 const app = express();
 app.use(express.json());
@@ -21,17 +24,33 @@ app.get('/config.js', (req, res) => {
 // --- Utility Functions ---
 
 async function readArray(file) {
+  if (useKv) {
+    try {
+      const data = await kv.get(file);
+      if (Array.isArray(data)) return data;
+    } catch (error) {
+      console.error(`Error reading ${file} from KV:`, error);
+    }
+  }
   try {
-    const data = await kv.get(file);
+    const data = JSON.parse(await fs.readFile(file, 'utf8'));
     return Array.isArray(data) ? data : [];
-  } catch (error) {
-    console.error(`Error reading ${file}:`, error);
+  } catch (err) {
+    if (err.code !== 'ENOENT') console.error(`Error reading ${file}:`, err);
     return [];
   }
 }
 
 async function writeArray(file, arr) {
-  await kv.set(file, arr);
+  if (useKv) {
+    try {
+      await kv.set(file, arr);
+      return;
+    } catch (err) {
+      console.error(`Error writing ${file} to KV:`, err);
+    }
+  }
+  await fs.writeFile(file, JSON.stringify(arr, null, 2));
 }
 
 async function append(file, obj) {
@@ -63,6 +82,24 @@ async function sendEmail(to, subject, text) {
   });
   await transport.sendMail({ from: SMTP_USER, to, subject, text });
 }
+
+// Create a default admin if the user list is empty
+async function ensureDefaultAdmin() {
+  const users = await readArray('users.json');
+  if (users.length === 0) {
+    users.push({
+      id: Date.now().toString(),
+      email: 'admin@example.com',
+      passwordHash: sha256('admin123'),
+      role: 'admin',
+      created: new Date().toISOString(),
+      active: true
+    });
+    await writeArray('users.json', users);
+    console.log('Created default admin user admin@example.com / admin123');
+  }
+}
+ensureDefaultAdmin().catch(err => console.error('Failed to ensure admin user:', err));
 
 // --- API Routes ---
 
