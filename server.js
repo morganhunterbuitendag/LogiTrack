@@ -261,6 +261,21 @@ app.post('/api/users/:id/deactivate', async (req, res) => {
   }
 });
 
+app.delete('/api/users/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    let users = await readArray('users.json');
+    const idx = users.findIndex(u => u.id === id);
+    if (idx === -1) return res.sendStatus(404);
+    users.splice(idx, 1);
+    await writeArray('users.json', users);
+    res.json({ ok: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'server error' });
+  }
+});
+
 app.post('/api/auth/forgot', async (req, res) => {
   try {
     const { email } = req.body || {};
