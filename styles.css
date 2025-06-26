@@ -83,3 +83,14 @@ dialog .actions{display:flex;justify-content:flex-end;gap:.75rem;margin-top:1.5r
 .user-info{display:flex;align-items:center;gap:.5rem;font-weight:500;color:#2D3748;}
 .user-circle{width:32px;height:32px;border-radius:50%;background:#2C7A7B;color:#fff;display:flex;align-items:center;justify-content:center;font-size:.9rem;}
 
+/* Responsive layout adjustments */
+@media (max-width: 768px){
+  .dashboard{flex-direction:column;}
+  .sidebar{width:100%;padding:10px 0;overflow-x:auto;}
+  .sidebar ul{display:flex;justify-content:space-around;}
+  .content-area{flex:1;}
+  .top-content-row{flex-direction:column;}
+  .grid-container,.map-and-info-container{flex:1 0 auto;width:100%;}
+  .map-container{height:300px;}
+}
+
